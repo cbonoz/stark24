@@ -1,5 +1,4 @@
-import ConnectWallet from './wallet/connect-wallet'
-import { SwitchNetwork } from './wallet/switch-network'
+import { DynamicWidget } from '@dynamic-labs/sdk-react-core'
 
 const NavHeader = () => {
     return (
@@ -8,22 +7,22 @@ const NavHeader = () => {
                 <a href="/" className="block">
                     <img
                         src="/logo.png"
-                        alt="StarkFront Logo"
+                        alt="ZkPages Logo"
                         className="h-8 w-auto fill-current"
                     />
                 </a>
-                {/* <span className="ml-4 text-xl font-bold">StarkFront</span> */}
+                {/* <span className="ml-4 text-xl font-bold">ZkPages</span> */}
             </div>
             <nav className="flex">
                 <a
                     href="/upload"
                     className="text-gray-500 hover:underline mx-4"
                 >
-                    Create storefront
+                    Create store front
                 </a>
                 |
-                <a href="/sign" className="text-gray-500 hover:underline mx-4">
-                    Verify storefront
+                <a href="/store" className="text-gray-500 hover:underline mx-4">
+                    Discover store front
                 </a>
                 |
                 <a href="/about" className="text-gray-500 hover:underline mx-4">
@@ -35,6 +34,7 @@ const NavHeader = () => {
                 {/* <SwitchNetwork /> */}
             </span>
             <span className="align-right justify-end">
+                <DynamicWidget />
                 {/* <ConnectWallet /> */}
             </span>
         </header>

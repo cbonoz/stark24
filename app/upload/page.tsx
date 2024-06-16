@@ -9,8 +9,8 @@ const Upload = () => {
             {/* make min width 400 */}
             <BasicCard
                 className="w-[600px] p-4"
-                title="Create new proof of storefront"
-                description="Create a new balance verification request. This item will become publicly available for other users to discover."
+                title="Create new store front (zkPage)"
+                description="Create a new store front. This page will become publicly available for other users to discover and make purchases."
             >
                 <UploadForm />
             </BasicCard>

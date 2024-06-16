@@ -9,17 +9,17 @@ export const RouteButtons = () => {
     return (
         <div className="flex space-x-4">
             <Button
-                className="bg-blue-700 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded"
+                className="bg-purple-700 hover:bg-purple-900 text-white font-bold py-2 px-4 rounded"
                 onClick={() => router.push('/upload')}
             >
-                Create storefront
+                Create store front
             </Button>
 
             <Button
-                className="bg-blue-700 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded"
-                onClick={() => router.push('/sign')}
+                className="bg-purple-700 hover:bg-purple-900 text-white font-bold py-2 px-4 rounded"
+                onClick={() => router.push('/store')}
             >
-                Verify storefront
+                Discover store front
             </Button>
         </div>
     )

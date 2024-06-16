@@ -11,7 +11,7 @@ import {
     DynamicContextProvider,
     DynamicWidget,
 } from '@dynamic-labs/sdk-react-core'
-import { EthereumWalletConnectors } from '@dynamic-labs/ethereum'
+import { StarknetWalletConnectors } from '@dynamic-labs/starknet'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -25,14 +25,14 @@ export default function RootLayout({
             <DynamicContextProvider
                 settings={{
                     environmentId: process.env.NEXT_PUBLIC_DYNAMIC_ENV_ID || '',
-                    walletConnectors: [EthereumWalletConnectors],
+                    walletConnectors: [StarknetWalletConnectors],
                 }}
             >
                 <body className={inter.className}>
                     <NavHeader />
                     <div>{children}</div>
                 </body>
-                <DynamicWidget />
+
             </DynamicContextProvider>
         </html>
     )

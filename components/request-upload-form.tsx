@@ -20,7 +20,7 @@ import {
     getExplorerUrl,
     getPlaceholderDescription,
     isEmpty,
-    signUrl,
+    storeUrl,
 } from '@/lib/utils'
 import Link from 'next/link'
 import RenderObject from './render-object'
@@ -29,10 +29,9 @@ import { ReloadIcon } from '@radix-ui/react-icons'
 import { uploadFile } from '@/lib/stor'
 import { useAccount, useChainId, useChains } from 'wagmi'
 import { deployContract } from '@/lib/contract/deploy'
-import { config } from '@/app/config'
 import { useEthersSigner } from '@/lib/get-signer'
 import { Chain } from 'viem'
-import { network } from 'hardhat'
+import { useDynamicContext, useUserWallets } from '@dynamic-labs/sdk-react-core'
 
 const formSchema = z.object({
     title: z.string().min(3, {
@@ -53,34 +52,22 @@ function UploadForm() {
     const [result, setResult] = useState<any>()
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<any>(null)
-    const { address } = useAccount()
-    const chainId = useChainId()
-    const chains = useChains()
-    const currentChain: Chain | undefined = (chains || []).find(
-        (c) => c.id === chainId
-    )
-    const signer = useEthersSigner({ chainId })
+
+    const userWallets = useUserWallets()
+    const wallet = userWallets?.[0]
+    const address = wallet?.address || ''
+    const signer = {}
+    const currentChain = {}
+    const chains = []
 
     const setDemoData = async () => {
-        form.setValue('title', 'Balance verification request')
+        form.setValue('title', `My Video clip store`)
         form.setValue('description', getPlaceholderDescription())
-        form.setValue('recipientName', 'John Doe')
-        form.setValue(
-            'recipientAddress',
-            address || '0x1234567890123456789012345678901234567890'
-        )
-        // balance
-        form.setValue('balance', '0.0001')
-        form.setValue('file', null)
     }
 
     const clearForm = () => {
         form.setValue('title', '')
         form.setValue('description', '')
-        form.setValue('recipientName', '')
-        form.setValue('balance', '0')
-        form.setValue('recipientAddress', '')
-        form.setValue('file', null)
     }
 
     const form = useForm<z.infer<typeof formSchema>>({
@@ -129,7 +116,7 @@ function UploadForm() {
             res['cid'] = cid
             res['message'] =
                 'Request created successfully. Share the below url with the intended recipient.'
-            res['url'] = signUrl(contractAddress)
+            res['url'] = storeUrl(contractAddress)
             setResult(res)
             // scroll to result
             window.scrollTo(0, document.body.scrollHeight)
@@ -144,6 +131,7 @@ function UploadForm() {
 
     const hasResult = !isEmpty(result)
     const currency = currentChain?.nativeCurrency?.symbol || 'ETH'
+    const { user } = useDynamicContext()
 
     return (
         <div>
@@ -156,6 +144,7 @@ function UploadForm() {
                     >
                         Set demo data
                     </a>
+                    <div>User: {JSON.stringify(user || {})}</div>
                     <form
                         onSubmit={form.handleSubmit(onSubmit)}
                         className="space-y-8"
@@ -171,7 +160,7 @@ function UploadForm() {
                                     </FormLabel>
                                     <FormControl>
                                         <Input
-                                            placeholder={`.1 ${currency} storefront verification`}
+                                            placeholder={`.1 ${currency} store front verification`}
                                             {...field}
                                         />
                                     </FormControl>

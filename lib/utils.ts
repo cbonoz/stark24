@@ -46,18 +46,8 @@ export const getExplorerUrl = (
     return `${baseUrl}/${prefix}/${address}`
 }
 
-export const getPlaceholderDescription = () => {
-    // week from now
-    const date = new Date(
-        Date.now() + 7 * 24 * 60 * 60 * 1000
-    ).toLocaleDateString()
-    return `This is to validate proof of funds to have your offer considered. See the attachment below, sign at your earliest convenience but this would be nice to have by ${date}.`
-}
-
 export const transformMetadata = (contractData: ContractMetadata) => {
-    contractData.balance = Number(contractData.balance)
-    contractData.validatedAt = Number(contractData.validatedAt) * 1000
-    contractData.createdAt = Number(contractData.createdAt) * 1000
+    // add any transformations.
     return contractData
 }
 
@@ -83,8 +73,8 @@ export const getNameFromUser = (user: any) => {
     return `${user.firstName} ${user.lastName}`
 }
 
-export const signUrl = (address: string) =>
-    `${window.location.origin}/sign/${address}`
+export const storeUrl = (address: string) =>
+    `${window.location.origin}/store/${address}`
 
 export const termsUrl = () => `${window.location.origin}/terms`
 

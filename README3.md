@@ -2,7 +2,7 @@
     <img src='https://i.ibb.co/6m1MxJz/logo.png' width=400 />
 </p>
 
-## StarkFront
+## ZkPages
 
 Mediated proof of fund requests managed by Lisk smart contracts with saved signatures of record.
 
@@ -16,15 +16,15 @@ Demo video (youtube ~3 minutes):
 
 Many high value purchases warrant proof of funds requests to know if a given offer or potential buyer is serious.
 
-With StarkFront, you can prove or assert you have a certain balance on connected wallets without exposing bank statements or keys to the requester. StarkFront generates a proof point at the time of attestation / verification that can be shared with the requester with a signature hash saved to the contract.
+With ZkPages, you can prove or assert you have a certain balance on connected wallets without exposing bank statements or keys to the requester. ZkPages generates a proof point at the time of attestation / verification that can be shared with the requester with a signature hash saved to the contract.
 
-Example of this process in real estate: <a href="https://www.investopedia.com/ask/answers/082316/how-do-mortgage-lenders-check-and-verify-bank-statements.asp#:~:text=A%20proof%20of%20deposit%20is,closing%20costs%20for%20a%20property." target="_blank"> Proof of funds</a>
+Example of this process in real estate: <a href="https://www.investopedia.com/ask/answers/082316/how-do-mortgage-lenders-check-and-discover-bank-statements.asp#:~:text=A%20proof%20of%20deposit%20is,closing%20costs%20for%20a%20property." target="_blank"> Proof of funds</a>
 
 ### Example signed verification request
 
 Contract: https://sepolia-blockscout.lisk.com/address/0x9189c7722C0B815cd3752d559aD10980E20e59B4
 
-Signature page: https://starkfrontlisk.vercel.app/sign/0x9189c7722C0B815cd3752d559aD10980E20e59B4 (only viewable with designated recipient address).
+Signature page: https://zkpageslisk.vercel.app/store/0x9189c7722C0B815cd3752d559aD10980E20e59B4 (only viewable with designated recipient address).
 
 
 ### Example use case
@@ -34,17 +34,17 @@ Signature page: https://starkfrontlisk.vercel.app/sign/0x9189c7722C0B815cd3752d5
     * Generate smart contract transactions and sign protocol attestations demonstrating sufficient funds for a specific transaction, without revealing additional or personal details.
     * Share these proofs with sellers or realtors for verification.
 * **Sellers and Realtors:**
-    * Verify proofs using the app to confirm a buyer's financial eligibility for a smooth pre-qualification process.
+    * Discover proofs using the app to confirm a buyer's financial eligibility for a smooth pre-qualification process.
     * Expedite serious offers by eliminating the need for lengthy document verification.
 
 
-When a storefront is created, a smart contract gets deployed marking the information around the storefront. The address of the smart contract serves as part of a unique url which can be shared with the recipient or verifier - only the intended recipient can validate their balance and create an attestation to be shared with the seller.
+When a store front is created, a smart contract gets deployed marking the information around the store front. The address of the smart contract serves as part of a unique url which can be shared with the recipient or verifier - only the intended recipient can validate their balance and create an attestation to be shared with the seller.
 
 When the verification is complete, a blockchain event is also emitted with information about the validation. This event can be listened to on other networks or blockchain platforms (or for indexing on `the Graph` as well).
 
 ### Technologies used
 
-**Filecoin**: Used for secure file storage for additional material related to the fund request. When the other party visits the authenticated balance verification link, he or she can access the uploaded material related to the purpose of the upload. This is also secured with saturn and uses lighthouse web3 sdk underneath for both upload and download based on the cid. Created cids are saved to the smart contracts and are retrieved when the verification page is accessed. The cid is only revealed to the authorized parties (owner and recipient) for each smart contract / transaction.
+**Filecoin**: Used for secure file storage for additional material related to the fund request. When the other party visits the authenticated store front link, he or she can access the uploaded material related to the purpose of the upload. This is also secured with saturn and uses lighthouse web3 sdk underneath for both upload and download based on the cid. Created cids are saved to the smart contracts and are retrieved when the verification page is accessed. The cid is only revealed to the authorized parties (owner and recipient) for each smart contract / transaction.
 
 <a href="https://gateway.lighthouse.storage/ipfs/QmeSUzMZSmUnj56WkriWwHjWqtJyarFX41EkPdscrQusuy">Example uploaded document</a>
 
@@ -73,7 +73,7 @@ The app should now be running on port 3000.
 
 1. Enhanced Smart Contract Functionality: Implementing advanced smart contract functionalities to automate and streamline fund verification processes further, reducing manual evaluation / communication such as emailing.
 
-2. Expanded Blockchain Support: Adding support for additional blockchain networks and protocols to broaden StarkFront's reach and accessibility, catering to users across different blockchain ecosystems.
+2. Expanded Blockchain Support: Adding support for additional blockchain networks and protocols to broaden ZkPages's reach and accessibility, catering to users across different blockchain ecosystems.
 
 3. Integration of Advanced Security Features: Integrating advanced security features such as zero-knowledge proofs to further validate the viewer of a contract.
 
@@ -121,7 +121,7 @@ The app should now be running on port 3000.
 
 
 <!--
-StarkFront
+ZkPages
 Demo:
 * If you've ever bought a hom
 * Intro of proof of funds

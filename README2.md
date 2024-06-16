@@ -1,9 +1,9 @@
-StarkFront
+ZkPages
 ---
 
 Zero knowledge digital content single page store fronts.
 
-Enable anyone to create a trace-free digital content storefront page on Stark. Privacy-focused checkouts.
+Enable anyone to create a secure digital content store front page on Stark. Privacy-focused checkouts.
 
 Going after the Consumer and Privacy categories of Starknet.
 

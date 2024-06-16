@@ -22,7 +22,7 @@ contract StoreContract {
     // metadata
     Metadata private metadata;
 
-    // Event to log balance verification
+    // Event to log store front
     event FundVerified(address verifier, uint256 balance, string signature);
 
     constructor(
@@ -57,7 +57,7 @@ contract StoreContract {
     }
 
     function validate(string memory _signature) public returns (Metadata memory) {
-        // verify address
+        // discover address
         // get balance of sender
         uint256 balance = address(msg.sender).balance;
         uint256 targetBalance = metadata.balance;
