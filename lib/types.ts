@@ -1,10 +1,14 @@
-export interface RequestData {
-    recipientName: string
-    recipientAddress: string
-    balance: number
+export interface PageItem {
     name: string
     description: string
-    files: string[]
+    link: string
+    price: string
+}
+
+export interface PageData {
+    name: string
+    description: string
+    items: PageItem[]
 }
 
 export interface ContractMetadata {
@@ -12,23 +16,5 @@ export interface ContractMetadata {
     createdAt: number
     name: string
     description: string
-    balance: number
-    recipientName: string
-    recipientAddress: string
-    cid?: string // optional cid pointer to attachment/s
-    validatedAt: number
-    signature: string
     network: string
-}
-
-export interface SchemaItem {
-    name: string
-    type: string
-}
-
-export interface SchemaEntry {
-    name: string
-    request: string
-    timestamp: string
-    signature: string
 }
