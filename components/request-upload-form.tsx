@@ -16,12 +16,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { useState } from 'react'
-import {
-    getExplorerUrl,
-    getPlaceholderDescription,
-    isEmpty,
-    storeUrl,
-} from '@/lib/utils'
+import { getExplorerUrl, isEmpty, storeUrl } from '@/lib/utils'
 import Link from 'next/link'
 import RenderObject from './render-object'
 import { Textarea } from './ui/textarea'
@@ -57,12 +52,23 @@ function UploadForm() {
     const wallet = userWallets?.[0]
     const address = wallet?.address || ''
     const signer = {}
-    const currentChain = {}
+    const currentChain = {
+        name: 'Ethereum',
+        nativeCurrency: {
+            symbol: 'ETH',
+            decimals: 18,
+        },
+        blockExplorers: {
+            default: {
+                url: 'https://etherscan.io',
+            },
+        },
+    }
     const chains = []
 
     const setDemoData = async () => {
         form.setValue('title', `My Video clip store`)
-        form.setValue('description', getPlaceholderDescription())
+        form.setValue('description', 'This is a demo store')
     }
 
     const clearForm = () => {
@@ -160,7 +166,7 @@ function UploadForm() {
                                     </FormLabel>
                                     <FormControl>
                                         <Input
-                                            placeholder={`.1 ${currency} store front verification`}
+                                            placeholder={`.1 ${currency} storefront verification`}
                                             {...field}
                                         />
                                     </FormControl>

@@ -35,7 +35,7 @@ export const formatCurrency = (amount: number, chain?: Chain) => {
 
 export const getExplorerUrl = (
     address?: string,
-    chain?: Chain,
+    chain?: any,
     isTx?: boolean
 ) => {
     const prefix = isTx ? 'tx' : 'address'
