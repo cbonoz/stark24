@@ -74,7 +74,7 @@ export const getNameFromUser = (user: any) => {
 }
 
 export const storeUrl = (address: string) =>
-    `${window.location.origin}/store/${address}`
+    `${window.location.origin}/pid/${address}`
 
 export const termsUrl = () => `${window.location.origin}/terms`
 

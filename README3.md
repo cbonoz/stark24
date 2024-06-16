@@ -24,7 +24,7 @@ Example of this process in real estate: <a href="https://www.investopedia.com/as
 
 Contract: https://sepolia-blockscout.lisk.com/address/0x9189c7722C0B815cd3752d559aD10980E20e59B4
 
-Signature page: https://zkpageslisk.vercel.app/store/0x9189c7722C0B815cd3752d559aD10980E20e59B4 (only viewable with designated recipient address).
+Signature page: https://zkpageslisk.vercel.app/pid/0x9189c7722C0B815cd3752d559aD10980E20e59B4 (only viewable with designated recipient address).
 
 
 ### Example use case

@@ -27,6 +27,7 @@ import { deployContract } from '@/lib/contract/deploy'
 import { useEthersSigner } from '@/lib/get-signer'
 import { Chain } from 'viem'
 import { useDynamicContext, useUserWallets } from '@dynamic-labs/sdk-react-core'
+import { config } from '@/util/site-config'
 
 const formSchema = z.object({
     title: z.string().min(3, {
@@ -161,9 +162,7 @@ function UploadForm() {
                             name="title"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>
-                                        Enter fund request name
-                                    </FormLabel>
+                                    <FormLabel>Enter store page name</FormLabel>
                                     <FormControl>
                                         <Input
                                             placeholder={`.1 ${currency} storefront verification`}
@@ -171,7 +170,7 @@ function UploadForm() {
                                         />
                                     </FormControl>
                                     <FormDescription>
-                                        Name of the request.
+                                        Name of the store.
                                     </FormDescription>
                                     <FormMessage />
                                 </FormItem>
@@ -187,108 +186,12 @@ function UploadForm() {
                                     <FormLabel>Enter description</FormLabel>
                                     <FormControl>
                                         <Textarea
-                                            placeholder="Enter request description"
+                                            placeholder="Enter page description"
                                             {...field}
                                         />
                                     </FormControl>
                                     <FormDescription>
-                                        Additional description for the request.
-                                    </FormDescription>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-
-                        {/* add files */}
-
-                        <FormField
-                            control={form.control}
-                            name="recipientName"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Recipient name</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            placeholder="Recipient name"
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormDescription>
-                                        Name of the recipient.
-                                    </FormDescription>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="recipientAddress"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Recipient address</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            placeholder="Recipient address"
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormDescription>
-                                        Known address used for authentication
-                                        and ownership attestation. You should
-                                        collect the desired address from the
-                                        recipient before making this request.
-                                    </FormDescription>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-
-                        <FormField
-                            control={form.control}
-                            name="balance"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>
-                                        Required balance ({currency})
-                                    </FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            placeholder="Required balance"
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormDescription>
-                                        Required balance. Uses native{' '}
-                                        {currentChain?.name || 'chain'}
-                                        &nbsp;currency.
-                                    </FormDescription>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-
-                        <FormField
-                            control={form.control}
-                            name="file"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Add attachment</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            type="file"
-                                            // {...field}
-                                            onChange={(e) => {
-                                                form.setValue(
-                                                    'file',
-                                                    e.target.files
-                                                )
-                                            }}
-                                        />
-                                    </FormControl>
-                                    <FormDescription>
-                                        Optional attachment for the receipient
-                                        to download / access from the
-                                        verification page.
+                                        Additional description for the page.
                                     </FormDescription>
                                     <FormMessage />
                                 </FormItem>
@@ -310,7 +213,7 @@ function UploadForm() {
                 <div className="pt-8">
                     <Button onClick={() => setResult(null)} variant="link">
                         {' '}
-                        ← Create another request
+                        ← Create another page
                     </Button>
 
                     {/* center align */}
@@ -330,11 +233,11 @@ function UploadForm() {
                             ></path>
                         </svg>
                         <div className="text-xl mb-4">
-                            Request created successfully
+                            Page created successfully
                         </div>
                         <div className="flex flex-col items-center">
                             <div className="text-gray-500 text-sm my-2">
-                                Share the below url with the intended recipient
+                                Share the below url to your zkPage.
                             </div>
                         </div>
                         <Link
@@ -364,7 +267,7 @@ function UploadForm() {
                                         window.open(result.url)
                                     }}
                                 >
-                                    View request page
+                                    View page
                                 </Button>
                             )}
                         </div>

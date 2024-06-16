@@ -5,8 +5,8 @@ const About = () => {
     return (
         <div className="flex flex-col items-center justify-center mt-8">
             <BasicCard
-                title="About ZkPages"
-                description="Learn more about ZkPages and how it works."
+                title="About zkPages"
+                description="Learn more about zkPages and how it works."
                 className="min-w-[400px] p-4"
             >
                 {config.about.map((section, index) => (
