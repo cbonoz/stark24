@@ -64,7 +64,7 @@ The app should now be running on port 3000.
 
 2. Install dependencies via yarn in root folder. Run `npx hardhat compile` from `/StoreContract`
 
-3. Copy contents (includes ABI) to `metadata.tsx#STORE_CONTRACT`
+3. Copy contents (includes ABI) to `metadata.tsx#PAGE_CONTRACT`
 
 4. Rebuild web project. The app should now be using the updated contract code.
 

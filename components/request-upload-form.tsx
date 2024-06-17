@@ -33,14 +33,6 @@ const formSchema = z.object({
     title: z.string().min(3, {
         message: 'Request name must be at least 3 characters.',
     }),
-    recipientName: z.string().min(3, {
-        message: 'Recipient name must be at least 3 characters.',
-    }),
-    recipientAddress: z.string().min(3, {
-        message: 'Recipient address must be at least 3 characters.',
-    }),
-    balance: z.string(),
-    file: z.any().optional(),
     description: z.string().optional(),
 })
 
@@ -50,6 +42,8 @@ function UploadForm() {
     const [error, setError] = useState<any>(null)
 
     const userWallets = useUserWallets()
+    const { primaryWallet } = useDynamicContext()
+
     const wallet = userWallets?.[0]
     const address = wallet?.address || ''
     const signer = {}
@@ -88,39 +82,14 @@ function UploadForm() {
         setError(null)
         try {
             const res: any = {}
-            let balance = parseFloat(values.balance)
-            if (isNaN(balance) || balance <= 0) {
-                throw new Error(
-                    'Balance must be a valid number greater than 0.'
-                )
-            }
-
-            // upload file
-            const file = values.file
-            let cid = ''
-            if (file) {
-                cid = await uploadFile(file)
-                console.log('fileAddress', cid)
-            }
-
             // upload contract
 
-            const { title, description, recipientName, recipientAddress } =
-                values
+            const { title, description } = values
 
-            const contractAddress = await deployContract(
-                signer,
-                title,
-                description || '',
-                balance,
-                recipientName,
-                recipientAddress,
-                cid,
-                currentChain?.name || ''
-            )
+            const contractAddress = await deployContract(signer, title)
             res['contractAddress'] = contractAddress
             res['contractUrl'] = getExplorerUrl(contractAddress, currentChain)
-            res['cid'] = cid
+            // res['cid'] = cid
             res['message'] =
                 'Request created successfully. Share the below url with the intended recipient.'
             res['url'] = storeUrl(contractAddress)
@@ -134,6 +103,10 @@ function UploadForm() {
         } finally {
             setLoading(false)
         }
+    }
+
+    if (primaryWallet) {
+        console.log('primaryWallet', primaryWallet)
     }
 
     const hasResult = !isEmpty(result)

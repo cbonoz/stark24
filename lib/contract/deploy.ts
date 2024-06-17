@@ -1,23 +1,14 @@
-import { STORE_CONTRACT } from './metadata'
+import { PAGE_CONTRACT } from './metadata'
 import { formatDate } from '../utils'
 import { ethers } from 'ethers'
 
 // https://viem.sh/docs/contract/deployContract.html
 
-export async function deployContract(
-    signer: any,
-    title: string,
-    description: string,
-    wei: any,
-    recipientName: string,
-    recipientAddress: string,
-    cid: string,
-    network: string
-) {
+export async function deployContract(signer: any, title: string) {
     // Deploy contract with ethers
     const factory = new ethers.ContractFactory(
-        STORE_CONTRACT.abi,
-        STORE_CONTRACT.bytecode,
+        PAGE_CONTRACT.abi,
+        PAGE_CONTRACT.sierra_program,
         signer
     )
 
@@ -30,23 +21,13 @@ export async function deployContract(
 
     let contract: any = await factory.deploy(
         title,
-        description,
         balance,
-        recipientName,
-        recipientAddress,
-        cid,
-        network
+
     )
     // log
     console.log(
         'Deploying contract...',
         title,
-        description,
-        balance,
-        recipientName,
-        recipientAddress,
-        cid,
-        network
     )
 
     contract = await contract.waitForDeployment()
@@ -55,7 +36,7 @@ export async function deployContract(
 }
 
 export const getMetadata = async (signer: any, address: string) => {
-    const contract = new ethers.Contract(address, STORE_CONTRACT.abi, signer)
+    const contract = new ethers.Contract(address, PAGE_CONTRACT.abi, signer)
     const result = await (contract.getMetadata as any).call()
     console.log('result', result)
     return {
@@ -72,7 +53,7 @@ export const validate = async (
     address: string,
     signature: string
 ) => {
-    const contract = new ethers.Contract(address, STORE_CONTRACT.abi, signer)
+    const contract = new ethers.Contract(address, PAGE_CONTRACT.abi, signer)
     const result = await contract.validate(signature)
     console.log('result', result)
     return {

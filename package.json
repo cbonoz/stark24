@@ -10,6 +10,8 @@
     },
     "dependencies": {
         "@dynamic-labs/ethereum": "^2.1.4",
+        "@dynamic-labs/ethers-v5": "^2.2.0",
+        "@dynamic-labs/ethers-v6": "^2.2.0",
         "@dynamic-labs/sdk-react-core": "^2.1.4",
         "@dynamic-labs/starknet": "^2.1.4",
         "@hookform/resolvers": "^3.3.4",
