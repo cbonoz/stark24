@@ -7,3 +7,5 @@ starknet = ">=2.2.0"
 
 [[target.starknet-contract]]
 sierra = true
+# Enable CASM codegen.
+casm = true

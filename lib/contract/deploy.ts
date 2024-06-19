@@ -1,38 +1,37 @@
-import { PAGE_CONTRACT } from './metadata'
+import { PAGE_CONTRACT, PAGE_CONTRACT_SIERRA } from './sierra'
 import { formatDate } from '../utils'
 import { ethers } from 'ethers'
+import { Account, CairoAssembly, Contract, ec, Provider } from 'starknet'
+import { PAGE_CONTRACT_CASM } from './casm'
+
+function bin2String(array: any[]) {
+    return String.fromCharCode.apply(String, array)
+}
 
 // https://viem.sh/docs/contract/deployContract.html
 
-export async function deployContract(signer: any, title: string) {
-    // Deploy contract with ethers
-    const factory = new ethers.ContractFactory(
-        PAGE_CONTRACT.abi,
-        PAGE_CONTRACT.sierra_program,
-        signer
-    )
+export async function deployContract(wallet: any, title: string) {
+    const provider = await wallet.connector.getWeb3Provider()
+    const signer = await wallet.connector.getSigner()
+    const address = wallet.address
 
-    const ethToWei = (amount: any) => {
-        return ethers.parseEther(amount + '')
-    }
+    const account = new Account(provider, address, signer)
 
-    const balance = ethToWei(wei)
-    console.log('balance', balance, wei)
+    // Deploy contract with starknetjs using dynamic.xyz provider.
+    const contract = JSON.stringify(PAGE_CONTRACT_SIERRA)
+    const casm = PAGE_CONTRACT_CASM as any
+    console.log('Deploying contract...', title, contract, casm)
 
-    let contract: any = await factory.deploy(
-        title,
-        balance,
+    // https://www.starknetjs.com/docs/guides/create_contract/#declareanddeploy-your-new-contract
+    const deployResponse = await account.declareAndDeploy({
+        contract,
+        casm,
+    })
 
-    )
-    // log
-    console.log(
-        'Deploying contract...',
-        title,
-    )
-
-    contract = await contract.waitForDeployment()
-    console.log('deployed contract...', contract.target)
-    return contract.target
+    const classHash = deployResponse.declare.class_hash
+    const contractAddress = deployResponse.deploy.contract_address
+    console.log('Deployed contract...', title, classHash, contractAddress)
+    return contractAddress
 }
 
 export const getMetadata = async (signer: any, address: string) => {

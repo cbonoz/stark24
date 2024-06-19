@@ -1,4 +1,5 @@
 export interface PageItem {
+    id?: string
     name: string
     description: string
     link: string
@@ -6,9 +7,11 @@ export interface PageItem {
 }
 
 export interface PageData {
+    owner: string
     name: string
     description: string
     items: PageItem[]
+    createdAt?: string
 }
 
 export interface ContractMetadata {

@@ -86,7 +86,7 @@ function UploadForm() {
 
             const { title, description } = values
 
-            const contractAddress = await deployContract(signer, title)
+            const contractAddress = await deployContract(primaryWallet, title)
             res['contractAddress'] = contractAddress
             res['contractUrl'] = getExplorerUrl(contractAddress, currentChain)
             // res['cid'] = cid
