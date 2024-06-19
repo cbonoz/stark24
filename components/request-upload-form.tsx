@@ -28,7 +28,7 @@ import { Chain } from 'viem'
 import { useDynamicContext, useUserWallets } from '@dynamic-labs/sdk-react-core'
 import { config } from '@/util/site-config'
 import { useAccount, useConnect, useProvider } from '@starknet-react/core'
-import { DEMO_PAGE } from '@/lib/constants'
+import { DEMO_PAGE, SEPOLIA } from '@/lib/constants'
 
 const formSchema = z.object({
     title: z.string().min(3, {
@@ -61,20 +61,7 @@ function UploadForm() {
     const wallet = userWallets?.[0]
     const address = wallet?.address || starkAddress || ''
     const signer = {}
-    const currentChain = {
-        name: 'Ethereum',
-        nativeCurrency: {
-            symbol: 'ETH',
-            decimals: 18,
-        },
-        blockExplorers: {
-            default: {
-                url: 'https://etherscan.io',
-            },
-        },
-    }
-    const chains = []
-
+    const currentChain = SEPOLIA
     const setDemoData = async () => {
         form.setValue('title', `My Video clip store`)
         form.setValue('description', 'This is a demo store')
@@ -85,6 +72,8 @@ function UploadForm() {
     const clearForm = () => {
         form.setValue('title', '')
         form.setValue('description', '')
+        form.setValue('owner', '')
+        form.setValue('items', [])
     }
 
     const form = useForm<z.infer<typeof formSchema>>({
@@ -127,7 +116,7 @@ function UploadForm() {
                 itemString
             )
             res['contractAddress'] = contractAddress
-            res['contractUrl'] = getExplorerUrl(contractAddress, currentChain)
+            res['contractUrl'] = getExplorerUrl(contractAddress)
             // res['cid'] = cid
             res['message'] =
                 'Request created successfully. Share the below url with the intended recipient.'

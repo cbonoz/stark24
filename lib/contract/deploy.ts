@@ -1,18 +1,6 @@
 import { PAGE_CONTRACT_SIERRA } from './sierra'
-import { formatDate } from '../utils'
-import { ethers } from 'ethers'
-import {
-    Account,
-    CairoAssembly,
-    Contract,
-    ec,
-    Signer,
-    RpcProvider,
-    CallData,
-    stark,
-} from 'starknet'
+import { RpcProvider, CallData, stark } from 'starknet'
 import { PAGE_CONTRACT_CASM } from './casm'
-import { PageItem } from '../types'
 
 const PROVIDER_SEPOLIA = new RpcProvider({
     nodeUrl: 'https://free-rpc.nethermind.io/sepolia-juno/v0_7',
@@ -31,7 +19,7 @@ export async function deployContract(
     const casmCode = PAGE_CONTRACT_CASM
     const myCallData = new CallData(sierraCode.abi)
     const constructor = myCallData.compile('constructor', {
-        title: 100,
+        title,
         description,
         owner: ownerAddress,
         items: itemString,
@@ -64,35 +52,4 @@ export async function deployContract(
     const contractAddress = deployResponse.deploy.contract_address
     console.log('Deployed contract...', title, classHash, contractAddress)
     return contractAddress
-}
-
-export const getMetadata = async (signer: any, address: string) => {
-    const contract = new ethers.Contract(address, PAGE_CONTRACT.abi, signer)
-    const result = await (contract.getMetadata as any).call()
-    console.log('result', result)
-    return {
-        name: result[0],
-        description: result[1],
-        versionCount: result[2].toNumber(),
-        createdAt: formatDate(result[3].toNumber() * 1000),
-        owner: result[4],
-    }
-}
-
-export const validate = async (
-    signer: any,
-    address: string,
-    signature: string
-) => {
-    const contract = new ethers.Contract(address, PAGE_CONTRACT.abi, signer)
-    const result = await contract.validate(signature)
-    console.log('result', result)
-    return {
-        creator: result[0],
-        dataHash: result[1],
-        timestamp: formatDate(result[2].toNumber() * 1000),
-        version: result[3].toNumber(),
-        cid: result[4],
-        notes: result[5],
-    }
 }

@@ -1,8 +1,8 @@
 import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import { Chain } from 'viem'
-import { Config } from 'wagmi'
-import { ContractMetadata } from './types'
+import { PageData } from './types'
+import { SEPOLIA } from './constants'
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs))
@@ -35,20 +35,20 @@ export const formatCurrency = (amount: number, chain?: Chain) => {
 
 export const getExplorerUrl = (
     address?: string,
-    chain?: any,
     isTx?: boolean
 ) => {
     const prefix = isTx ? 'tx' : 'address'
-    const baseUrl = chain?.blockExplorers?.default?.url
+    const baseUrl = SEPOLIA.explorers.starkscan[0]
     if (!baseUrl || !address) {
         return ''
     }
     return `${baseUrl}/${prefix}/${address}`
 }
 
-export const transformMetadata = (contractData: ContractMetadata) => {
+export const transformMetadata = (contractData: string): PageData => {
     // add any transformations.
-    return contractData
+    const d = JSON.parse(contractData) as PageData
+    return d
 }
 
 export const formatDate = (

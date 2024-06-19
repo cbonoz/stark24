@@ -1,9 +1,7 @@
 'use client'
 
 import BasicCard from '@/components/basic-card'
-import RenderObject from '@/components/render-object'
 import { Button } from '@/components/ui/button'
-import { PAGE_CONTRACT } from '@/lib/contract/metadata'
 import {
     abbreviate,
     formatCurrency,
@@ -14,16 +12,20 @@ import {
     transformMetadata,
 } from '@/lib/utils'
 import { ReloadIcon } from '@radix-ui/react-icons'
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Address, Chain, createPublicClient, http } from 'viem'
 import { writeContract } from '@wagmi/core'
 
 import { DEMO_PAGE } from '@/lib/constants'
-import { PageData } from '@/lib/types'
 import { useDynamicContext } from '@dynamic-labs/sdk-react-core'
-import { useContractRead } from '@starknet-react/core'
+import {
+    useContract,
+    useAccount,
+    useContractRead,
+    useContractWrite,
+    useNetwork,
+} from '@starknet-react/core'
 import { PAGE_CONTRACT_SIERRA } from '@/lib/contract/sierra'
 
 const RESULT_KEYS = [
@@ -48,12 +50,31 @@ export default function ZkPage({ params }: { params: Params }) {
     const [error, setError] = useState<any>(null)
     const ref = useRef(null)
     const { primaryWallet } = useDynamicContext()
-
-    const address = primaryWallet?.address
-
     const router = useRouter()
-
     const { pageId } = params
+    const { address, account } = useAccount()
+    const { chain } = useNetwork()
+
+    const { contract } = useContract({
+        abi: PAGE_CONTRACT_SIERRA.abi,
+        address: pageId,
+    })
+
+    const calls = useMemo(() => {
+        if (!pageId || !contract) return []
+        return contract.populateTransaction['purchase']!(pageId, {
+            low: 1,
+            high: 0,
+        })
+    }, [contract, address])
+
+    const {
+        writeAsync,
+        data: writeData,
+        isPending,
+    } = useContractWrite({
+        calls,
+    })
 
     const {
         data: contractData,
@@ -75,7 +96,9 @@ export default function ZkPage({ params }: { params: Params }) {
     //     args: ['0x03A71968491d55603FFe1b11A9e23eF013f75bCF'],
     //   })
 
-    const data = contractData || DEMO_PAGE
+    const isReady = !isLoading && !isError && contractData
+
+    const data = isReady ? transformMetadata(contractData as string) : DEMO_PAGE
 
     async function purchaseRequest(itemId?: string) {
         if (!data) {
@@ -86,14 +109,9 @@ export default function ZkPage({ params }: { params: Params }) {
         setPurchaseLoading(true)
 
         try {
-            // const res = await writeContract(config, {
-            //     abi: PAGE_CONTRACT.abi,
-            //     address: pageId,
-            //     functionName: 'purchase',
-            //     args: [itemId],
-            // })
+            const res = await writeAsync()
 
-            console.log('purchaseRequest validate')
+            console.log('purchaseRequest validate', res)
             alert('Thanks for your purchase')
         } catch (error) {
             console.log('error completing purchase ', error)

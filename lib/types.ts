@@ -13,11 +13,3 @@ export interface PageData {
     items: PageItem[]
     createdAt?: string
 }
-
-export interface ContractMetadata {
-    owner: string
-    createdAt: number
-    name: string
-    description: string
-    network: string
-}
