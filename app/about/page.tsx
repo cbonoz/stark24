@@ -1,3 +1,5 @@
+'use client'
+
 import BasicCard from '@/components/basic-card'
 import { config } from '@/util/site-config'
 
