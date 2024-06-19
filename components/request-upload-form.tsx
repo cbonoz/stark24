@@ -15,37 +15,51 @@ import {
     FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { getExplorerUrl, isEmpty, storeUrl } from '@/lib/utils'
 import Link from 'next/link'
 import RenderObject from './render-object'
 import { Textarea } from './ui/textarea'
 import { ReloadIcon } from '@radix-ui/react-icons'
 import { uploadFile } from '@/lib/stor'
-import { useAccount, useChainId, useChains } from 'wagmi'
 import { deployContract } from '@/lib/contract/deploy'
 import { useEthersSigner } from '@/lib/get-signer'
 import { Chain } from 'viem'
 import { useDynamicContext, useUserWallets } from '@dynamic-labs/sdk-react-core'
 import { config } from '@/util/site-config'
+import { useAccount, useConnect, useProvider } from '@starknet-react/core'
+import { DEMO_PAGE } from '@/lib/constants'
 
 const formSchema = z.object({
     title: z.string().min(3, {
         message: 'Request name must be at least 3 characters.',
     }),
     description: z.string().optional(),
+    owner: z.string().optional(),
+    items: z.array(
+        z.object({
+            name: z.string(),
+            description: z.string(),
+            link: z.string(),
+            price: z.string(),
+        })
+    ),
 })
 
 function UploadForm() {
     const [result, setResult] = useState<any>()
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<any>(null)
+    const [ready, setReady] = useState(false)
 
     const userWallets = useUserWallets()
     const { primaryWallet } = useDynamicContext()
+    const { account, isConnected, address: starkAddress } = useAccount()
+    const { provider } = useProvider()
+    const { connect, connectors } = useConnect()
 
     const wallet = userWallets?.[0]
-    const address = wallet?.address || ''
+    const address = wallet?.address || starkAddress || ''
     const signer = {}
     const currentChain = {
         name: 'Ethereum',
@@ -64,6 +78,8 @@ function UploadForm() {
     const setDemoData = async () => {
         form.setValue('title', `My Video clip store`)
         form.setValue('description', 'This is a demo store')
+        form.setValue('owner', address)
+        form.setValue('items', DEMO_PAGE.items)
     }
 
     const clearForm = () => {
@@ -76,17 +92,40 @@ function UploadForm() {
         defaultValues: {},
     })
 
+    useEffect(() => {
+        if (ready && isConnected) {
+            onSubmit(form.getValues())
+        }
+    }, [ready, isConnected])
+
     // 2. Define a submit handler.
     async function onSubmit(values: z.infer<typeof formSchema>) {
         setLoading(true)
+
+        if (!isConnected) {
+            connect({ connector: connectors[0] })
+            setReady(true)
+            // setLoading(false)
+            return
+            // return
+        }
+
         setError(null)
         try {
             const res: any = {}
             // upload contract
 
-            const { title, description } = values
+            const { title, description, items, owner } = values
 
-            const contractAddress = await deployContract(primaryWallet, title)
+            const itemString = JSON.stringify(items || DEMO_PAGE.items)
+
+            const contractAddress = await deployContract(
+                account,
+                address,
+                title,
+                description || '',
+                itemString
+            )
             res['contractAddress'] = contractAddress
             res['contractUrl'] = getExplorerUrl(contractAddress, currentChain)
             // res['cid'] = cid
@@ -105,10 +144,6 @@ function UploadForm() {
         }
     }
 
-    if (primaryWallet) {
-        console.log('primaryWallet', primaryWallet)
-    }
-
     const hasResult = !isEmpty(result)
     const currency = currentChain?.nativeCurrency?.symbol || 'ETH'
     const { user } = useDynamicContext()
@@ -119,7 +154,7 @@ function UploadForm() {
                 <Form {...form}>
                     <a
                         href="#"
-                        className="hover:underline text-blue-500 cursor-pointer pointer"
+                        className="hover:underline text-purple-500 cursor-pointer pointer"
                         onClick={setDemoData}
                     >
                         Set demo data
@@ -177,7 +212,7 @@ function UploadForm() {
                             )}
                             {!address
                                 ? 'Connect wallet to continue'
-                                : 'Create request'}
+                                : 'Create page'}
                         </Button>
                     </form>
                 </Form>

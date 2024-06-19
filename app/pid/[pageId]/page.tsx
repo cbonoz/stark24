@@ -20,16 +20,11 @@ import { useEffect, useRef, useState } from 'react'
 import { Address, Chain, createPublicClient, http } from 'viem'
 import { writeContract } from '@wagmi/core'
 
-import {
-    useAccount,
-    useChainId,
-    useChains,
-    useSwitchChain,
-    useWriteContract,
-} from 'wagmi'
 import { DEMO_PAGE } from '@/lib/constants'
 import { PageData } from '@/lib/types'
 import { useDynamicContext } from '@dynamic-labs/sdk-react-core'
+import { useContractRead } from '@starknet-react/core'
+import { PAGE_CONTRACT_SIERRA } from '@/lib/contract/sierra'
 
 const RESULT_KEYS = [
     'name',
@@ -47,7 +42,7 @@ interface Params {
 
 export default function ZkPage({ params }: { params: Params }) {
     const [loading, setLoading] = useState(true)
-    const [data, setData] = useState<PageData | undefined>()
+    // const [data, setData] = useState<PageData | undefined>()
     const [result, setResult] = useState<any>(null)
     const [purchaseLoading, setPurchaseLoading] = useState(false)
     const [error, setError] = useState<any>(null)
@@ -60,37 +55,18 @@ export default function ZkPage({ params }: { params: Params }) {
 
     const { pageId } = params
 
-    async function fetchData() {
-        setLoading(true)
-        try {
-            // const publicClient = createPublicClient({
-            //     chain: currentChain,
-            //     transport: http(),
-            // })
-            // let contractData: ContractMetadata = transformMetadata(
-            //     (await publicClient.readContract({
-            //         abi: PAGE_CONTRACT.abi,
-            //         address: requestId,
-            //         functionName: 'getMetadata',
-            //     })) as ContractMetadata
-            // )
-            // convert balance and validatedAt to number from bigint
-            const contractData = DEMO_PAGE
-
-            console.log('contractData', contractData)
-            setData(contractData)
-
-            // if (contractData.attestationId && SCHEMA_ID) {
-            //     const res = await getAttestation(contractData.attestationId)
-            //     console.log('getAttestation', res)
-            // }
-        } catch (error) {
-            console.log('error reading contract', error)
-            setError(error)
-        } finally {
-            setLoading(false)
-        }
-    }
+    const {
+        data: contractData,
+        isError,
+        isLoading,
+        error: contractError,
+    } = useContractRead({
+        functionName: 'get_metadata',
+        args: [],
+        abi: PAGE_CONTRACT_SIERRA.abi,
+        address: pageId,
+        watch: true,
+    })
 
     // https://wagmi.sh/react/guides/read-from-contract
     // const { data: balance } = useReadContract({
@@ -98,6 +74,8 @@ export default function ZkPage({ params }: { params: Params }) {
     //     functionName: 'balanceOf',
     //     args: ['0x03A71968491d55603FFe1b11A9e23eF013f75bCF'],
     //   })
+
+    const data = contractData || DEMO_PAGE
 
     async function purchaseRequest(itemId?: string) {
         if (!data) {
@@ -116,7 +94,6 @@ export default function ZkPage({ params }: { params: Params }) {
             // })
 
             console.log('purchaseRequest validate')
-            await fetchData()
             alert('Thanks for your purchase')
         } catch (error) {
             console.log('error completing purchase ', error)
@@ -124,14 +101,6 @@ export default function ZkPage({ params }: { params: Params }) {
         }
         setPurchaseLoading(false)
     }
-
-    useEffect(() => {
-        if (address) {
-            fetchData()
-        } else {
-            setLoading(false)
-        }
-    }, [address])
 
     if (loading) {
         return (
@@ -195,7 +164,7 @@ export default function ZkPage({ params }: { params: Params }) {
                                         {formatCurrency(Number(item.price))}
                                     </p>
                                     <Button
-                                        className="mt-4 flex items-center px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        className="mt-4 flex items-center px-4 py-2 bg-purple-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                         onClick={() => {
                                             purchaseRequest(item.id)
                                         }}

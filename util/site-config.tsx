@@ -22,7 +22,7 @@ export const config = {
     ],
     steps: [
         {
-            title: 'Create',
+            title: 'Create page',
             description:
                 'Create a digital content store page. A shareable link is generated that you can distribute to potential buyers.',
         },
@@ -32,9 +32,9 @@ export const config = {
                 'Share your store page link with your audience. They can browse and purchase your digital content securely.',
         },
         {
-            title: 'Optimize',
+            title: 'Earn and optimize',
             description:
-                'Review and optimize your store page based on user feedback and transaction data to enhance the user experience and increase sales.',
+                'Collect payments and optimize your store page based on user feedback and transaction data to enhance the user experience and increase sales.',
         },
     ],
 }

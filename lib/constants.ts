@@ -1,5 +1,14 @@
 import { PageData } from './types'
 
+import { sepolia } from '@starknet-react/chains'
+import {
+    argent,
+    braavos,
+} from '@starknet-react/core'
+
+export const SUPPORTED_CHAINS = [sepolia]
+export const SUPPORTED_CONNECTORS = [braavos()]
+
 export const DEMO_PAGE: PageData = {
     name: `Chris' demo zk store`,
     owner: '0x1234567890123456789012345678901234567890',
