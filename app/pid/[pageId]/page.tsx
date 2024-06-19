@@ -29,6 +29,7 @@ import {
 } from 'wagmi'
 import { DEMO_PAGE } from '@/lib/constants'
 import { PageData } from '@/lib/types'
+import { useDynamicContext } from '@dynamic-labs/sdk-react-core'
 
 const RESULT_KEYS = [
     'name',
@@ -51,7 +52,9 @@ export default function ZkPage({ params }: { params: Params }) {
     const [purchaseLoading, setPurchaseLoading] = useState(false)
     const [error, setError] = useState<any>(null)
     const ref = useRef(null)
-    const { address } = useAccount()
+    const { primaryWallet } = useDynamicContext()
+
+    const address = primaryWallet?.address
 
     const router = useRouter()
 
@@ -172,22 +175,29 @@ export default function ZkPage({ params }: { params: Params }) {
                         </p>
                     </div>
                 )}
+                {/* <RenderObject title="Data" obj={data} /> */}
 
                 {data && (
-                    <div className="mt-4">
-                        <RenderObject title="Data" obj={data} />
-
-                        {data?.items.map((item, index) => {
+                    <div className="mt-8 space-y-8">
+                        {data.items.map((item, index) => {
                             return (
-                                <div key={index} className="mt-4">
-                                    <h3 className="text-lg font-bold">
+                                <div
+                                    key={index}
+                                    className="p-6 border border-gray-200 rounded-lg shadow-md bg-white"
+                                >
+                                    <h3 className="text-xl font-semibold text-gray-800">
                                         {item.name}
                                     </h3>
-                                    <p>{item.description}</p>
-                                    <p>{formatCurrency(Number(item.price))}</p>
+                                    <p className="mt-2 text-gray-600">
+                                        {item.description}
+                                    </p>
+                                    <p className="mt-2 text-gray-800 font-medium">
+                                        {formatCurrency(Number(item.price))}
+                                    </p>
                                     <Button
+                                        className="mt-4 flex items-center px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                         onClick={() => {
-                                            purchaseRequest(item?.id)
+                                            purchaseRequest(item.id)
                                         }}
                                     >
                                         {purchaseLoading && (
@@ -200,6 +210,7 @@ export default function ZkPage({ params }: { params: Params }) {
                         })}
                     </div>
                 )}
+
                 {result && (
                     <div className="mt-4">
                         <h3 className="text-lg font-bold">Result</h3>

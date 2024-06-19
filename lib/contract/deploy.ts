@@ -1,7 +1,15 @@
-import { PAGE_CONTRACT, PAGE_CONTRACT_SIERRA } from './sierra'
+import { PAGE_CONTRACT_SIERRA } from './sierra'
 import { formatDate } from '../utils'
 import { ethers } from 'ethers'
-import { Account, CairoAssembly, Contract, ec, Provider } from 'starknet'
+import {
+    Account,
+    CairoAssembly,
+    Contract,
+    ec,
+    Provider,
+    Signer,
+    RpcProvider,
+} from 'starknet'
 import { PAGE_CONTRACT_CASM } from './casm'
 
 function bin2String(array: any[]) {
@@ -11,8 +19,11 @@ function bin2String(array: any[]) {
 // https://viem.sh/docs/contract/deployContract.html
 
 export async function deployContract(wallet: any, title: string) {
-    const provider = await wallet.connector.getWeb3Provider()
-    const signer = await wallet.connector.getSigner()
+    const providerSepoliaTestnetNethermindPublic = new RpcProvider({
+        nodeUrl: 'https://free-rpc.nethermind.io/sepolia-juno/v0_7',
+    })
+    const provider = providerSepoliaTestnetNethermindPublic // await wallet.connector.getRpc()
+    const signer = new Signer(await wallet.connector.getSigner())
     const address = wallet.address
 
     const account = new Account(provider, address, signer)
