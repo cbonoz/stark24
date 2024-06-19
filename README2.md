@@ -67,6 +67,8 @@ If successful, you should have the casm and sierra output files. Assign the cont
 ### Screenshots
 
 
+### Useful links
+* https://github.com/shadcn-ui/ui/discussions/790
 
 ### License
 
