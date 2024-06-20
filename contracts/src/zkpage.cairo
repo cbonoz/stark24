@@ -1,9 +1,9 @@
 #[starknet::interface]
 trait ISimpleStore<TContractState> {
     fn get_metadata(self: @TContractState) -> (
-        ByteArray,
-        ByteArray,
-        ByteArray,
+        felt252,
+        felt252,
+        felt252,
         ByteArray
     );
 
@@ -14,30 +14,32 @@ trait ISimpleStore<TContractState> {
 #[starknet::contract]
 mod ZkPage {
     use super::ISimpleStore;
+    use starknet::get_caller_address;
+    use starknet::ContractAddress;
 
 
     #[derive(Debug, Clone)]
     struct PageItem {
-        name: ByteArray,
-        description: ByteArray,
-        link: ByteArray,
+        name: felt252,
+        description: felt252,
+        link: felt252,
         price: u128,
     }
 
     #[storage]
     struct Storage {
-        page_name: ByteArray,
-        description: ByteArray,
-        owner: ByteArray,
+        page_name: felt252,
+        description: felt252,
+        owner: felt252,
         items: ByteArray
     }
 
     #[constructor]
     fn constructor(
         ref self: ContractState,
-        page_name: ByteArray,
-        description: ByteArray,
-        owner: ByteArray,
+        page_name: felt252,
+        description: felt252,
+        owner: felt252,
         items: ByteArray,
     ) {
         self.page_name.write(page_name);
@@ -46,12 +48,15 @@ mod ZkPage {
         self.items.write(items);
     }
 
+    #[event]
+    fn ItemPurchased(from: ContractAddress, item_index: i32, value: u256) {}
+
     #[abi(embed_v0)]
     impl ISimpleStoreImpl of super::ISimpleStore<ContractState> {
         fn get_metadata(self: @ContractState) -> (
-            ByteArray,
-            ByteArray,
-            ByteArray,
+            felt252,
+            felt252,
+            felt252,
             ByteArray
         ) {
             let page_name = self.page_name.read();
@@ -61,27 +66,15 @@ mod ZkPage {
             (page_name, description, owner, items)
         }
 
+
+        // https://github.com/PhilippeR26/starknet.js-workshop-typescript/blob/789e912a1ac647e4eb87f3ad97f52b44b2851f99/contracts/cairo200/erc20.cairo
+        // #[payable]
         fn purchase(
             self: @ContractState,
             item_index: i32,
         ) -> ByteArray {
-            // let sender = msg.sender();
-            // let storage_items = self.items.clone();
-
-            // // Ensure item_index is within valid range
-            // assert(item_index >= 0 && (item_index as usize) < storage_items.len(), "Invalid item index");
-
-            // let mut item = storage_items[item_index as usize].clone();
-
-            // // Ensure sufficient payment
-            // assert(msg.value() >= item.price as u128, "Insufficient payment");
-
-            // Transfer payment to owner
-            // let owner = self.owner.read();
-            // starknet::transfer::stark_transfer(owner, msg.value());
-
-            // Return the link of the purchased item
-            // item.link.clone()
+            // emit event
+            ItemPurchased(get_caller_address(), item_index, 0);
             "purchase successful"
         }
     }

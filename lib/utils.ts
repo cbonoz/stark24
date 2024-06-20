@@ -33,11 +33,16 @@ export const formatCurrency = (amount: number, chain?: Chain) => {
     return `${amount / 10 ** decimals} ${symbol}`
 }
 
-export const getExplorerUrl = (
-    address?: string,
-    isTx?: boolean
-) => {
-    const prefix = isTx ? 'tx' : 'address'
+export function feltToStr(felt: bigint): string {
+    return Buffer.from(felt.toString(16), 'hex').toString()
+}
+
+export function feltArrToStr(felts: bigint[]): string {
+    return felts.reduce((memo, felt) => memo + feltToStr(felt), '')
+}
+
+export const getExplorerUrl = (address?: string, isTx?: boolean) => {
+    const prefix = isTx ? 'tx' : 'contract'
     const baseUrl = SEPOLIA.explorers.starkscan[0]
     if (!baseUrl || !address) {
         return ''
@@ -45,10 +50,20 @@ export const getExplorerUrl = (
     return `${baseUrl}/${prefix}/${address}`
 }
 
-export const transformMetadata = (contractData: string): PageData => {
-    // add any transformations.
-    const d = JSON.parse(contractData) as PageData
-    return d
+export const transformMetadata = (contractData: any): PageData => {
+    // This is where we can transform the contract data to a more usable format,
+    const name = feltToStr(contractData[0])
+    const description = feltToStr(contractData[1])
+    const owner = feltToStr(contractData[2])
+    const itemString = feltArrToStr(contractData[3].data)
+    const items = JSON.parse(itemString)
+
+    return {
+        name,
+        description,
+        owner,
+        items,
+    }
 }
 
 export const formatDate = (

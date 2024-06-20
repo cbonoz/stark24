@@ -88,7 +88,10 @@ function UploadForm() {
         setLoading(true)
 
         if (!isConnected) {
-            connect({ connector: connectors[0] })
+            const key = primaryWallet?.key
+            const connectorIndex = key === 'braavos' ? 0 : 1
+
+            connect({ connector: connectors[connectorIndex] })
             setReady(true)
             // setLoading(false)
             return

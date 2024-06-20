@@ -1,2 +1,3 @@
 build:
-	scarb build
+	./build.sh
+
