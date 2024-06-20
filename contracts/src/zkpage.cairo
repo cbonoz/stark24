@@ -66,16 +66,15 @@ mod ZkPage {
             (page_name, description, owner, items)
         }
 
-
         // https://github.com/PhilippeR26/starknet.js-workshop-typescript/blob/789e912a1ac647e4eb87f3ad97f52b44b2851f99/contracts/cairo200/erc20.cairo
-        // #[payable]
+        // Send purchase event.
         fn purchase(
             self: @ContractState,
             item_index: i32,
         ) -> ByteArray {
             // emit event
             ItemPurchased(get_caller_address(), item_index, 0);
-            "purchase successful"
+            "purchase event emitted"
         }
     }
 }
