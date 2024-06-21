@@ -58,12 +58,14 @@ export const transformMetadata = (contractData: any): PageData => {
     const itemString = feltArrToStr(contractData[3].data)
     const items = JSON.parse(itemString)
 
-    return {
+    const data = {
         name,
         description,
         owner,
         items,
     }
+    console.log('transformMetadata', data)
+    return data
 }
 
 export const formatDate = (

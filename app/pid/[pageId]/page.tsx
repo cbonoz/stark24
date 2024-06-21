@@ -30,16 +30,7 @@ import {
     useConnect,
 } from '@starknet-react/core'
 import { PAGE_CONTRACT_SIERRA } from '@/lib/contract/sierra'
-
-const RESULT_KEYS = [
-    'name',
-    'description',
-    'recipientName',
-    'recipientAddress',
-    'owner',
-    'network',
-    'attestationId',
-]
+import ViewReceipts from '@/components/view-receipts'
 
 interface Params {
     pageId: Address
@@ -61,6 +52,7 @@ export default function ZkPage({ params }: { params: Params }) {
     const { provider } = useProvider()
     const [lastSelectedItemId, setLastSelectedItemId] = useState<number>(-1)
     const { connect, connectors } = useConnect()
+    const [viewReceipts, setViewReceipts] = useState(false)
 
     const address = starkAddress || primaryWallet?.address
 
@@ -139,6 +131,7 @@ export default function ZkPage({ params }: { params: Params }) {
     const hasContract = !isLoading && !isError && contractData
 
     const data = hasContract ? transformMetadata(contractData as string) : null
+    const isOwner = true || data?.owner === address
 
     async function purchaseRequest() {
         if (!data) {
@@ -181,6 +174,10 @@ export default function ZkPage({ params }: { params: Params }) {
         )
     }
 
+    const toggleReceipts = () => {
+        setViewReceipts(!viewReceipts)
+    }
+
     const invalid = !loading && !data
     const generalError = error || fetchError
 
@@ -189,8 +186,18 @@ export default function ZkPage({ params }: { params: Params }) {
         <div className="flex flex-col items-center justify-center mt-8">
             <BasicCard
                 title={
-                    <span className="justify-center">
-                        {data?.name || 'ZkPage'}
+                    <span>
+                        <span>{data?.name || 'ZkPage'}</span>
+                        {isOwner && (
+                            <span
+                                onClick={toggleReceipts}
+                                className="text-sm justify-end justify-right items-end ml-4 text-purple-500 cursor-pointer hover:underline"
+                            >
+                                {!viewReceipts
+                                    ? 'View receipts (visible to you only)'
+                                    : 'Back to store'}
+                            </span>
+                        )}
                     </span>
                 }
                 // description="Find and verify a fund request using your wallet."
@@ -256,7 +263,9 @@ export default function ZkPage({ params }: { params: Params }) {
                 )}
                 {/* <RenderObject title="Data" obj={data} /> */}
 
-                {data && !result && (
+                {viewReceipts && isOwner && <ViewReceipts pageId={pageId} />}
+
+                {data && !result && !viewReceipts && (
                     <div className="mt-8 space-y-8">
                         <div>{data?.description}</div>
 
