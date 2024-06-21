@@ -18,7 +18,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { Address, Chain, createPublicClient, http } from 'viem'
 import { writeContract } from '@wagmi/core'
 
-import { DEMO_PAGE } from '@/lib/constants'
+import { DEMO_PAGE, VOYAGE_KEY } from '@/lib/constants'
 import { useDynamicContext } from '@dynamic-labs/sdk-react-core'
 import {
     useContract,
@@ -188,7 +188,7 @@ export default function ZkPage({ params }: { params: Params }) {
                 title={
                     <span>
                         <span>{data?.name || 'ZkPage'}</span>
-                        {isOwner && (
+                        {isOwner && VOYAGE_KEY && (
                             <span
                                 onClick={toggleReceipts}
                                 className="text-sm justify-end justify-right items-end ml-4 text-purple-500 cursor-pointer hover:underline"
