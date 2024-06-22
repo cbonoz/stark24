@@ -1,13 +1,15 @@
+use starknet::ContractAddress;
+
 #[starknet::interface]
 trait ISimpleStore<T> {
     fn get_metadata(self: @T) -> (
         felt252,
         ByteArray,
-        felt252,
+        ByteArray,
         ByteArray
     );
 
-    fn purchase(ref self: T, item_index: i32) -> ByteArray;
+    fn purchase_item(ref self: T, item_index: i32) -> ByteArray;
 }
 
 #[starknet::contract]
@@ -36,7 +38,7 @@ mod ZkPage {
     struct Storage {
         page_name: felt252,
         description: ByteArray,
-        owner: felt252,
+        owner: ByteArray,
         items: ByteArray,
         purchase_map: LegacyMap::<(ContractAddress, i32), bool>,
 
@@ -47,7 +49,7 @@ mod ZkPage {
         ref self: ContractState,
         page_name: felt252,
         description: ByteArray,
-        owner: felt252,
+        owner: ByteArray,
         items: ByteArray,
     ) {
         self.page_name.write(page_name);
@@ -56,22 +58,18 @@ mod ZkPage {
         self.items.write(items);
     }
 
-    // #[derive(Drop, starknet::Event)]
-    // struct ItemPurchased {
-    //     from: ContractAddress,
-    //     item_index: i32,
-    //     value: u256,
-    // }
+    #[event]
+    fn ItemPurchased(from: ContractAddress, item_index: i32) {}
 
     #[event]
-    fn ItemPurchased(from: ContractAddress, item_index: i32, value: u256) {}
+    fn PurchaseAttempt(from: ContractAddress, item_index: i32) {}
 
     #[abi(embed_v0)]
     impl ISimpleStoreImpl of super::ISimpleStore<ContractState> {
         fn get_metadata(self: @ContractState) -> (
             felt252,
             ByteArray,
-            felt252,
+            ByteArray,
             ByteArray
         ) {
             let page_name = self.page_name.read();
@@ -83,19 +81,20 @@ mod ZkPage {
 
         // https://github.com/PhilippeR26/starknet.js-workshop-typescript/blob/789e912a1ac647e4eb87f3ad97f52b44b2851f99/contracts/cairo200/erc20.cairo
         // Send purchase event.
-        fn purchase(
+        fn purchase_item(
             ref self: ContractState,
             item_index: i32,
         ) -> ByteArray {
             let sender = get_caller_address();
             let purchased = self.purchase_map.read((sender, item_index));
+            PurchaseAttempt(sender, item_index);
             if (purchased) {
-                return "already purchased";
+                return "Item already purchased";
             }
             // emit event if new purchase
             self.purchase_map.write((sender, item_index), true);
-            ItemPurchased(sender, item_index, 0);
-            "purchase event successful"
+            ItemPurchased(sender, item_index);
+            "Item purchase event successful"
         }
     }
 }

@@ -13,6 +13,8 @@ Going after the Consumer and Privacy categories of Starknet.
 
 Live Demo url: https://zkpages.vercel.app (Starknet Sepolia testnet)
 
+Note actual payments/transfers are disabled on the testnet deployment.
+
 Demo video (youtube ~3 minutes):
 
 ### Features
@@ -61,7 +63,16 @@ From the `/contracts` folder:
 
 If successful, you should have the casm and sierra output files. Assign the contents into the `casm.ts` and `sierra.ts` object files respectively. The updated contract should now be active in the application.
 
-### Future work
+### Potential Future work
+Mainnet Deployment: Transition zkPages to the Starknet mainnet, ensuring stability, security, and scalability for real-world usage.
+
+Enhance Access Controls: Implement advanced mechanisms like time-limited access links and single-use tokens to prevent unauthorized content sharing.
+
+Optimization Controls: Introduce performance optimization features such as caching, load balancing, and efficient data retrieval to handle high traffic.
+
+Expanded Payment Options: Integrate additional payment gateways and support various cryptocurrencies and fiat currencies for broader accessibility.
+
+Advanced Analytics and Reporting: Develop tools for tracking visitor behavior, sales performance, and other key metrics to help store owners optimize their storefronts
 
 
 ### Screenshots

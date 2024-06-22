@@ -53,21 +53,6 @@ export async function deployContract(
         salt: stark.randomAddress(),
     })
 
-    // const signer = new Signer(await wallet.connector.getSigner())
-    // const address = wallet.address
-
-    // const account = new Account(PROVIDER_SEPOLIA, address, signer)
-
-    // Deploy contract with starknetjs using dynamic.xyz provider.
-    // const contract = JSON.stringify(PAGE_CONTRACT_SIERRA)
-    // const casm = PAGE_CONTRACT_CASM as any
-
-    // // https://www.starknetjs.com/docs/guides/create_contract/#declareanddeploy-your-new-contract
-    // const deployResponse = await account.declareAndDeploy({
-    //     contract,
-    //     casm,
-    // })
-
     // Connect the new contract instance :
     const myTestContract = new Contract(
         sierraCode.abi,

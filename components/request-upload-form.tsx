@@ -300,7 +300,7 @@ function UploadForm() {
                                 : 'Create page'}
                         </Button>
                         {loading && (
-                            <span className="text-med mx-2 font-italics">
+                            <span className="text-med mx-2 italic">
                                 Note this may take a few moments...
                             </span>
                         )}
@@ -335,11 +335,15 @@ function UploadForm() {
                         <div className="text-xl mb-4">
                             Page created successfully
                         </div>
-                        <div className="flex flex-col items-center">
-                            <div className="text-gray-500 text-sm my-4">
-                                Share the below url to your zkPage.
-                            </div>
+                        <div className="flex items-center text-gray-500 text-sm my-4">
+                            Share the below url to your zkPage.
+                          
                         </div>
+                        <div className="text-blue-500 text-sm">
+                                If the contract shows as not deployed yet, it
+                                may take a few minutes for the contract to
+                                complete deployment.
+                            </div>
                         {/* <Link
                             href={result.url}
                             target="_blank"

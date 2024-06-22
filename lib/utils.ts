@@ -77,14 +77,15 @@ export const transformMetadata = (contractData: any): PageData => {
     // This is where we can transform the contract data to a more usable format,
     const name = feltToStr(contractData[0])
     const description = feltArrToStr(contractData[1].data)
-    const owner = feltArrToStr(contractData[2].data)
+    const owner = add0x(feltArrToStr(contractData[2].data))
+    // const owner = feltToStr(contractData[2])
     const itemString = feltArrToStr(contractData[3].data)
     const items = parseJson(itemString)
 
     const data = {
         name,
         description,
-        owner: add0x(owner),
+        owner: owner,
         items,
     }
     console.log('transformMetadata', data)

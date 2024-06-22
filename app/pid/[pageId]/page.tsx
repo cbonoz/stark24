@@ -16,7 +16,6 @@ import { ReloadIcon } from '@radix-ui/react-icons'
 import { useRouter } from 'next/navigation'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Address, Chain, createPublicClient, http } from 'viem'
-import { writeContract } from '@wagmi/core'
 
 import { DEMO_PAGE, VOYAGE_KEY } from '@/lib/constants'
 import { useDynamicContext } from '@dynamic-labs/sdk-react-core'
@@ -31,6 +30,7 @@ import {
 } from '@starknet-react/core'
 import { PAGE_CONTRACT_SIERRA } from '@/lib/contract/sierra'
 import ViewReceipts from '@/components/view-receipts'
+import { PageData } from '@/lib/types'
 
 interface Params {
     pageId: Address
@@ -40,16 +40,12 @@ export default function ZkPage({ params }: { params: Params }) {
     const [loading, setLoading] = useState(true)
     // const [data, setData] = useState<PageData | undefined>()
     const [purchaseLoading, setPurchaseLoading] = useState(false)
-    const ref = useRef(null)
     const [ready, setReady] = useState(false)
     const { primaryWallet } = useDynamicContext()
     const [result, setResult] = useState<any>()
-    const router = useRouter()
     const { pageId } = params
-    const { chain } = useNetwork()
     const [error, setError] = useState<Error | null>(null)
     const { account, isConnected, address: starkAddress } = useAccount()
-    const { provider } = useProvider()
     const [lastSelectedItemId, setLastSelectedItemId] = useState<number>(-1)
     const { connect, connectors } = useConnect()
     const [viewReceipts, setViewReceipts] = useState(false)
@@ -60,53 +56,6 @@ export default function ZkPage({ params }: { params: Params }) {
         abi: PAGE_CONTRACT_SIERRA.abi,
         address: pageId,
     })
-    // https://starknet-react.com/demos/accounts
-    const calls = useMemo(() => {
-        if (!pageId || !contract) {
-            return []
-        }
-        return [
-            {
-                contractAddress: pageId,
-                entrypoint: 'purchase',
-                calldata: [lastSelectedItemId],
-            },
-        ]
-        // return contract.populateTransaction['purchase']!(pageId, {
-        //     low: 1,
-        //     high: 0,
-        // })
-    }, [contract, address])
-
-    useEffect(() => {
-        if (lastSelectedItemId !== -1) {
-            purchaseRequest()
-        }
-    }, [lastSelectedItemId])
-
-    useEffect(() => {
-        if (ready && isConnected) {
-            purchaseRequest()
-        }
-    }, [ready, isConnected])
-
-    const {
-        writeAsync,
-        data: writeData,
-        isPending,
-        error: writeError,
-    } = useContractWrite({
-        calls,
-    })
-
-    useEffect(() => {
-        if (!isEmpty(writeData?.transaction_hash)) {
-            setResult({
-                transaction_hash: writeData?.transaction_hash,
-                contentUrl: data?.items[lastSelectedItemId].link,
-            })
-        }
-    }, [writeData])
 
     const {
         data: contractData,
@@ -121,17 +70,59 @@ export default function ZkPage({ params }: { params: Params }) {
         watch: true,
     })
 
-    // https://wagmi.sh/react/guides/read-from-contract
-    // const { data: balance } = useReadContract({
-    //     ...wagmiContractConfig,
-    //     functionName: 'balanceOf',
-    //     args: ['0x03A71968491d55603FFe1b11A9e23eF013f75bCF'],
-    //   })
-
     const hasContract = !isLoading && !isError && contractData
+    const data: PageData = hasContract
+        ? transformMetadata(contractData as string)
+        : (null as any)
 
-    const data = hasContract ? transformMetadata(contractData as string) : null
-    const isOwner = true || data?.owner === address
+    // https://starknet-react.com/demos/accounts
+    const calls = useMemo(() => {
+        if (!pageId || !contract || !account) {
+            return []
+        }
+        const transactions = []
+        const item = data?.items[lastSelectedItemId]
+        if (item?.price) {
+            const amount = Number(item.price) * 1e18
+            transactions.push(
+                contract.populateTransaction['transfer']!(data.owner, amount)
+            )
+        }
+
+        transactions.push({
+            contractAddress: pageId,
+            entrypoint: 'purchase_item',
+            calldata: [lastSelectedItemId],
+        })
+        return transactions
+    }, [contractData, contract, account])
+
+    useEffect(() => {
+        if (lastSelectedItemId !== -1) {
+            purchaseRequest()
+        }
+    }, [lastSelectedItemId])
+
+    const {
+        writeAsync,
+        data: writeData,
+        isPending,
+        error: writeError,
+    } = useContractWrite({
+        calls,
+    })
+
+    useEffect(() => {
+        if (!isEmpty(writeData?.transaction_hash)) {
+            setResult({
+                writeData: writeData,
+                transaction_hash: writeData?.transaction_hash,
+                contentUrl: data?.items[lastSelectedItemId].link,
+            })
+        }
+    }, [writeData])
+
+    const isOwner = data?.owner === address
 
     async function purchaseRequest() {
         if (!data) {
@@ -142,19 +133,23 @@ export default function ZkPage({ params }: { params: Params }) {
         setPurchaseLoading(true)
 
         try {
-            if (!isConnected && !ready) {
+            if (!isConnected && !ready || !account) {
                 const key = primaryWallet?.key
                 const connectorIndex = key === 'braavos' ? 0 : 1
 
                 connect({ connector: connectors[connectorIndex] })
                 setReady(true)
-                return
+                setTimeout(() => {
+                    writeAsync()
+                }, 5000)
+            } else {
+                const res = await writeAsync()
+                setPurchaseLoading(false)
             }
-            const res = await writeAsync()
         } catch (error) {
             console.log('error completing purchase ', error)
-        } finally {
             setPurchaseLoading(false)
+        } finally {
         }
     }
 
@@ -175,12 +170,14 @@ export default function ZkPage({ params }: { params: Params }) {
     }
 
     const toggleReceipts = () => {
+        setResult(null)
         setViewReceipts(!viewReceipts)
     }
 
     const invalid = !loading && !data
     const generalError = error || fetchError
-    const showAdmin = isOwner && !!VOYAGE_KEY
+    const showAdmin = !!VOYAGE_KEY
+    const isPurchasePending = isPending || purchaseLoading
 
     return (
         // center align
@@ -195,7 +192,7 @@ export default function ZkPage({ params }: { params: Params }) {
                                 className="text-sm justify-end justify-right items-end ml-4 text-purple-500 cursor-pointer hover:underline"
                             >
                                 {!viewReceipts
-                                    ? 'View receipts (visible to you only)'
+                                    ? 'View receipts'
                                     : 'Back to store'}
                             </span>
                         )}
@@ -286,13 +283,13 @@ export default function ZkPage({ params }: { params: Params }) {
                                         {formatCurrency(Number(item.price))}
                                     </p>
                                     <Button
-                                        disabled={purchaseLoading}
+                                        disabled={isPurchasePending}
                                         className="mt-4 flex items-center px-4 py-2 bg-purple-600 text-white font-semibold rounded-lg shadow-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 hover:shadow-lg transition-all duration-300 ease-in-out hover:cursor-pointer"
                                         onClick={() => {
                                             setLastSelectedItemId(index)
                                         }}
                                     >
-                                        {isPending &&
+                                        {isPurchasePending &&
                                             lastSelectedItemId == index && (
                                                 <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
                                             )}

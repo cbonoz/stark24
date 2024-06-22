@@ -21,9 +21,13 @@ export const config = {
                 'zkPages allows users to create, share, and manage digital content securely. Utilizing zk-rollups, it ensures transactions are processed quickly and with minimal fees.',
         },
         {
+            title: 'Notes on Testnet deployment',
+            description: 'Note required payments/transfers are disabled on the testnet deployment',
+        },
+        {
             title: 'Disclaimer',
             description:
-                'Note zkPages is currently a proof of concept prototype and is provided as-is without any guarantees. Use at your own discretion.',
+                'Note zkPages is currently a proof of concept prototype and is provided as-is without any guarantees. Try at your own discretion.',
         },
     ],
     steps: [

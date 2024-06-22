@@ -13,8 +13,16 @@ const axiosInstance = axios.create({
 })
 
 // https://docs.voyager.online/#get-/txns
-export const getTransactionsFromVoyager = (address: string, p?: number) => {
-    return axiosInstance.get(`/txns?to=${address}&p=${p || 1}`)
+export const getTransactionsFromVoyager = (address: string, p?: number, type?: string) => {
+    let url = `/txns?to=${address}`
+    if (p) {
+        url += `&p=${p}`
+    }
+
+    if (type) {
+        url += `&type=${type}`
+    }
+    return axiosInstance.get(url)
 }
 
 // https://docs.voyager.online/#get-/contracts/-contractAddress-
