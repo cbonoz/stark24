@@ -1,6 +1,7 @@
 import { PAGE_CONTRACT_SIERRA } from './sierra'
 import { RpcProvider, CallData, stark, Contract } from 'starknet'
 import { PAGE_CONTRACT_CASM } from './casm'
+import { strip0x } from '../utils'
 
 const PROVIDER_SEPOLIA = new RpcProvider({
     nodeUrl: 'https://free-rpc.nethermind.io/sepolia-juno/v0_7',
@@ -38,7 +39,7 @@ export async function deployContract(
     const args = {
         page_name: title,
         description: createByteArray(description),
-        owner: ownerAddress,
+        owner: createByteArray(strip0x(ownerAddress)),
         items: createByteArray(itemString),
     }
     // const args = [title, description, ownerAddress, itemString]

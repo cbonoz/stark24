@@ -261,6 +261,7 @@ function UploadForm() {
                             </div>
                         ))}
                         <Button
+                            type="button"
                             onClick={() => {
                                 setItems([...items, {}])
                             }}
@@ -269,6 +270,7 @@ function UploadForm() {
                         </Button>
                         &nbsp;
                         <Button
+                            type="button"
                             variant={'secondary'}
                             disabled={loading || items.length === 1}
                             onClick={() => {

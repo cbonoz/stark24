@@ -15,7 +15,7 @@ const NavHeader = () => {
             </div>
             <nav className="flex">
                 <a
-                    href="/upload"
+                    href="/create"
                     className="text-gray-500 hover:underline mx-4"
                 >
                     Create store front

@@ -50,18 +50,41 @@ export const getExplorerUrl = (address?: string, isTx?: boolean) => {
     return `${baseUrl}/${prefix}/${address}`
 }
 
+function parseJson(inputString: string) {
+    // Check if the string starts with '{'
+    if (inputString.startsWith('{')) {
+        const lastIndex = inputString.lastIndexOf('}')
+        if (lastIndex !== -1) {
+            inputString = inputString.slice(0, lastIndex + 1)
+        }
+    }
+    // Check if the string starts with '['
+    if (inputString.startsWith('[')) {
+        const lastIndex = inputString.lastIndexOf(']')
+        if (lastIndex !== -1) {
+            inputString = inputString.slice(0, lastIndex + 1)
+        }
+    }
+    // If the string doesn't start with '{' or '[', return it unchanged
+    return JSON.parse(inputString)
+}
+
+export const strip0x = (s: string) => (s.startsWith('0x') ? s.slice(2) : s)
+
+export const add0x = (s: string) => (s.startsWith('0x') ? s : `0x${s}`)
+
 export const transformMetadata = (contractData: any): PageData => {
     // This is where we can transform the contract data to a more usable format,
     const name = feltToStr(contractData[0])
     const description = feltArrToStr(contractData[1].data)
-    const owner = feltToStr(contractData[2])
+    const owner = feltArrToStr(contractData[2].data)
     const itemString = feltArrToStr(contractData[3].data)
-    const items = JSON.parse(itemString)
+    const items = parseJson(itemString)
 
     const data = {
         name,
         description,
-        owner,
+        owner: add0x(owner),
         items,
     }
     console.log('transformMetadata', data)

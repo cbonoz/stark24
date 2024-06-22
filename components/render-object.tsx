@@ -1,6 +1,11 @@
 import React from 'react'
 
-import { capitalize, convertCamelToHuman, formatDate } from '@/lib/utils'
+import {
+    capitalize,
+    convertCamelToHuman,
+    formatDate,
+    getExplorerUrl,
+} from '@/lib/utils'
 
 interface Props {
     title?: string
@@ -58,6 +63,23 @@ export default function RenderObject({
                         return (
                             <div className="render-object-key" key={i}>
                                 {convertCamelToHuman(k)}: <b>{val}</b>
+                            </div>
+                        )
+                    } else if (
+                        typeof val === 'string' &&
+                        k.toLowerCase().indexOf('address') !== -1 &&
+                        val.startsWith('0x')
+                    ) {
+                        return (
+                            <div className="render-object-key e" key={i}>
+                                {convertCamelToHuman(k)}:
+                                <a
+                                    href={getExplorerUrl(val)}
+                                    target="_blank"
+                                    className="text-blue-500 hover:underline"
+                                >
+                                    {val}
+                                </a>
                             </div>
                         )
                     }

@@ -12,7 +12,7 @@ export const RouteButtons = () => {
                 {' '}
                 <Button
                     className="bg-purple-700 hover:bg-purple-900 text-white font-bold py-2 px-4 rounded"
-                    onClick={() => router.push('/upload')}
+                    onClick={() => router.push('/create')}
                 >
                     Create store front
                 </Button>

@@ -6,7 +6,7 @@ import { argent, braavos } from '@starknet-react/core'
 // https://github.com/apibara/starknet-react/blob/dccd4c71863bd19cdd1985fc67d22c03b2bf893e/packages/chains/src/starknet.ts#L113
 export const SUPPORTED_CHAINS = [sepolia]
 export const SUPPORTED_CONNECTORS = [braavos(), argent()]
-export const VOYAGE_KEY = process.env.NEXT_PUBLIC_VOYAGER_API_KEY
+export const VOYAGE_KEY = process.env.NEXT_PUBLIC_VOYAGER_KEY
 
 export const SEPOLIA = {
     id: BigInt('0x534e5f5345504f4c4941'),

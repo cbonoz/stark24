@@ -180,6 +180,7 @@ export default function ZkPage({ params }: { params: Params }) {
 
     const invalid = !loading && !data
     const generalError = error || fetchError
+    const showAdmin = isOwner && !!VOYAGE_KEY
 
     return (
         // center align
@@ -188,7 +189,7 @@ export default function ZkPage({ params }: { params: Params }) {
                 title={
                     <span>
                         <span>{data?.name || 'ZkPage'}</span>
-                        {isOwner && VOYAGE_KEY && (
+                        {showAdmin && (
                             <span
                                 onClick={toggleReceipts}
                                 className="text-sm justify-end justify-right items-end ml-4 text-purple-500 cursor-pointer hover:underline"
