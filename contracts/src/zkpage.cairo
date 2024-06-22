@@ -1,21 +1,27 @@
 #[starknet::interface]
-trait ISimpleStore<TContractState> {
-    fn get_metadata(self: @TContractState) -> (
+trait ISimpleStore<T> {
+    fn get_metadata(self: @T) -> (
         felt252,
         ByteArray,
         felt252,
         ByteArray
     );
 
-    // #[payable]
-    fn purchase(self: @TContractState, item_index: i32) -> ByteArray;
+    fn purchase(ref self: T, item_index: i32) -> ByteArray;
 }
 
 #[starknet::contract]
 mod ZkPage {
     use super::ISimpleStore;
-    use starknet::get_caller_address;
-    use starknet::ContractAddress;
+    // Core Library Imports
+    use starknet::{ContractAddress, get_caller_address, storage_access::StorageBaseAddress, ClassHash};
+    use serde::Serde;
+    use starknet::event::EventEmitter;
+    use zeroable::Zeroable;
+    use traits::Into;
+    use traits::TryInto;
+    use array::ArrayTrait;
+    use option::OptionTrait;
 
 
     #[derive(Debug, Clone)]
@@ -31,7 +37,9 @@ mod ZkPage {
         page_name: felt252,
         description: ByteArray,
         owner: felt252,
-        items: ByteArray
+        items: ByteArray,
+        purchase_map: LegacyMap::<(ContractAddress, i32), bool>,
+
     }
 
     #[constructor]
@@ -47,6 +55,13 @@ mod ZkPage {
         self.owner.write(owner);
         self.items.write(items);
     }
+
+    // #[derive(Drop, starknet::Event)]
+    // struct ItemPurchased {
+    //     from: ContractAddress,
+    //     item_index: i32,
+    //     value: u256,
+    // }
 
     #[event]
     fn ItemPurchased(from: ContractAddress, item_index: i32, value: u256) {}
@@ -69,12 +84,18 @@ mod ZkPage {
         // https://github.com/PhilippeR26/starknet.js-workshop-typescript/blob/789e912a1ac647e4eb87f3ad97f52b44b2851f99/contracts/cairo200/erc20.cairo
         // Send purchase event.
         fn purchase(
-            self: @ContractState,
+            ref self: ContractState,
             item_index: i32,
         ) -> ByteArray {
-            // emit event
-            ItemPurchased(get_caller_address(), item_index, 0);
-            "purchase event emitted"
+            let sender = get_caller_address();
+            let purchased = self.purchase_map.read((sender, item_index));
+            if (purchased) {
+                return "already purchased";
+            }
+            // emit event if new purchase
+            self.purchase_map.write((sender, item_index), true);
+            ItemPurchased(sender, item_index, 0);
+            "purchase event successful"
         }
     }
 }
