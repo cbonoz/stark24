@@ -1,8 +1,14 @@
 export const config = {
     title: 'zkPages',
     description:
-        'zkPages is a digital content store powered by Starknet, providing secure and scalable transactions using zero-knowledge proofs',
+        'ZkPages is a digital content store platform powered by Starknet, providing secure checkout pages using zero-knowledge proofs',
     isLocal: process.env.NEXT_PUBLIC_ENV === 'development',
+    valueSentences: [
+        // 'zkPages is a digital content store powered by Starknet',
+        'Secure and scalable transactions using ZK-rollups on Starknet',
+        'Create, share, and manage digital content securely',
+        'No vendor agreements required',
+    ],
     about: [
         {
             title: 'What is zkPages?',
