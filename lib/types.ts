@@ -1,9 +1,9 @@
 export interface PageItem {
     id?: string
-    name: string
-    description: string
-    link: string
-    price: string
+    name?: string
+    description?: string
+    link?: string
+    price?: string
 }
 
 export interface PageData {

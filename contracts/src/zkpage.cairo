@@ -2,7 +2,7 @@
 trait ISimpleStore<TContractState> {
     fn get_metadata(self: @TContractState) -> (
         felt252,
-        felt252,
+        ByteArray,
         felt252,
         ByteArray
     );
@@ -21,7 +21,7 @@ mod ZkPage {
     #[derive(Debug, Clone)]
     struct PageItem {
         name: felt252,
-        description: felt252,
+        description: ByteArray,
         link: felt252,
         price: u128,
     }
@@ -29,7 +29,7 @@ mod ZkPage {
     #[storage]
     struct Storage {
         page_name: felt252,
-        description: felt252,
+        description: ByteArray,
         owner: felt252,
         items: ByteArray
     }
@@ -38,7 +38,7 @@ mod ZkPage {
     fn constructor(
         ref self: ContractState,
         page_name: felt252,
-        description: felt252,
+        description: ByteArray,
         owner: felt252,
         items: ByteArray,
     ) {
@@ -55,7 +55,7 @@ mod ZkPage {
     impl ISimpleStoreImpl of super::ISimpleStore<ContractState> {
         fn get_metadata(self: @ContractState) -> (
             felt252,
-            felt252,
+            ByteArray,
             felt252,
             ByteArray
         ) {

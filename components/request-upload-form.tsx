@@ -25,6 +25,8 @@ import { useDynamicContext, useUserWallets } from '@dynamic-labs/sdk-react-core'
 import { config } from '@/util/site-config'
 import { useAccount, useConnect, useProvider } from '@starknet-react/core'
 import { DEMO_PAGE, SEPOLIA } from '@/lib/constants'
+import { PageItem } from '@/lib/types'
+import { Separator } from '@radix-ui/react-select'
 
 const formSchema = z.object({
     title: z.string().min(3, {
@@ -32,14 +34,14 @@ const formSchema = z.object({
     }),
     description: z.string().optional(),
     owner: z.string().optional(),
-    items: z.array(
-        z.object({
-            name: z.string(),
-            description: z.string(),
-            link: z.string(),
-            price: z.string(),
-        })
-    ),
+    // items: z.array(
+    //     z.object({
+    //         name: z.string(),
+    //         description: z.string(),
+    //         link: z.string(),
+    //         price: z.string(),
+    //     })
+    // ),
 })
 
 function UploadForm() {
@@ -47,6 +49,7 @@ function UploadForm() {
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<any>(null)
     const [ready, setReady] = useState(false)
+    const [items, setItems] = useState<PageItem[]>([{}])
 
     const userWallets = useUserWallets()
     const { primaryWallet } = useDynamicContext()
@@ -59,17 +62,15 @@ function UploadForm() {
     const signer = {}
     const currentChain = SEPOLIA
     const setDemoData = async () => {
-        form.setValue('title', `My Video clip store`)
-        form.setValue('description', 'This is a demo store')
-        form.setValue('owner', address)
-        form.setValue('items', DEMO_PAGE.items)
+        form.setValue('title', DEMO_PAGE.name)
+        form.setValue('description', DEMO_PAGE.description)
+        setItems(DEMO_PAGE.items)
     }
 
     const clearForm = () => {
         form.setValue('title', '')
         form.setValue('description', '')
-        form.setValue('owner', '')
-        form.setValue('items', [])
+        setItems([{}])
     }
 
     const form = useForm<z.infer<typeof formSchema>>({
@@ -98,12 +99,25 @@ function UploadForm() {
             // return
         }
 
+        function validateItems(items: PageItem[]) {
+            if (isEmpty(items)) return false
+            return items.every((item) => {
+                return item.name && item.description && item.link && item.price
+            })
+        }
+
+        if (!validateItems(items)) {
+            setError('Please fill in all item fields')
+            setLoading(false)
+            return
+        }
+
         setError(null)
         try {
             const res: any = {}
             // upload contract
 
-            const { title, description, items, owner } = values
+            const { title, description } = values
 
             const itemString = JSON.stringify(items || DEMO_PAGE.items)
 
@@ -147,7 +161,9 @@ function UploadForm() {
                     >
                         Set demo data
                     </a>
-                    <div>User: {JSON.stringify(user || {})}</div>
+                    <Separator />
+                    <div className="text-xl my-4">General information</div>
+                    {/* <div>User: {JSON.stringify(user || {})}</div> */}
                     <form
                         onSubmit={form.handleSubmit(onSubmit)}
                         className="space-y-8"
@@ -158,43 +174,122 @@ function UploadForm() {
                             name="title"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Enter store page name</FormLabel>
                                     <FormControl>
                                         <Input
-                                            placeholder={`.1 ${currency} storefront verification`}
+                                            placeholder={`Your store or page name`}
                                             {...field}
                                         />
                                     </FormControl>
+
                                     <FormDescription>
-                                        Name of the store.
+                                        Store page name
                                     </FormDescription>
                                     <FormMessage />
                                 </FormItem>
                             )}
                         />
-
                         {/* Notes */}
                         <FormField
                             control={form.control}
                             name="description"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Enter description</FormLabel>
                                     <FormControl>
                                         <Textarea
+                                            rows={8}
                                             placeholder="Enter page description"
                                             {...field}
                                         />
                                     </FormControl>
                                     <FormDescription>
-                                        Additional description for the page.
+                                        Store description
                                     </FormDescription>
                                     <FormMessage />
                                 </FormItem>
                             )}
                         />
+                        <div className="text-xl">Add Items</div>
+                        {items.map((item, index) => (
+                            <div key={index} className="space-y-2">
+                                <FormLabel>Item {index + 1}</FormLabel>
+                                <Input
+                                    prefix="Item Name:"
+                                    value={items[index]?.name}
+                                    onChange={(e) => {
+                                        const newItems = [...items]
+                                        newItems[index].name = e.target.value
+                                        setItems(newItems)
+                                    }}
+                                    placeholder="Item Name"
+                                />
+                                <Input
+                                    value={items[index]?.description}
+                                    onChange={(e) => {
+                                        const newItems = [...items]
+                                        newItems[index].description =
+                                            e.target.value
+                                        setItems(newItems)
+                                    }}
+                                    placeholder="Item Description"
+                                />
+                                <Input
+                                    value={items[index]?.link}
+                                    onChange={(e) => {
+                                        const newItems = [...items]
+                                        newItems[index].link = e.target.value
+                                        setItems(newItems)
+                                    }}
+                                    placeholder="Link (redirects after purchase)"
+                                />
+                                <FormDescription>
+                                    User is redirected to this link after
+                                    purchase
+                                </FormDescription>
 
-                        <Button disabled={loading || !address} type="submit">
+                                <Input
+                                    value={items[index]?.price}
+                                    onChange={(e) => {
+                                        const newItems = [...items]
+                                        newItems[index].price = e.target.value
+                                        setItems(newItems)
+                                    }}
+                                    placeholder="Price (ETH)"
+                                />
+                                <FormDescription>
+                                    Price in {SEPOLIA.nativeCurrency.symbol}
+                                </FormDescription>
+                            </div>
+                        ))}
+                        <Button
+                            onClick={() => {
+                                setItems([...items, {}])
+                            }}
+                        >
+                            + Add item
+                        </Button>
+                        &nbsp;
+                        <Button
+                            variant={'secondary'}
+                            disabled={loading || items.length === 1}
+                            onClick={() => {
+                                if (items.length > 1) {
+                                    const newItems = [...items]
+                                    newItems.pop()
+                                    setItems(newItems)
+                                }
+                            }}
+                        >
+                            - Remove item
+                        </Button>
+                        <div className="text-xl my-4"></div>
+                        <hr />
+                        <div className="text-xl my-2"></div>
+                        <Separator />
+                        <Button
+                            disabled={loading || !address}
+                            type="submit"
+                            className="bg-purple-700 hover:bg-purple-900 text-white font-bold py-2 px-4 rounded"
+                        >
                             {loading && (
                                 <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
                             )}
@@ -202,11 +297,17 @@ function UploadForm() {
                                 ? 'Connect wallet to continue'
                                 : 'Create page'}
                         </Button>
+                        {loading && (
+                            <span className="text-med mx-2 font-italics">
+                                Note this may take a few moments...
+                            </span>
+                        )}
                     </form>
                 </Form>
             )}
+
             {hasResult && (
-                <div className="pt-8">
+                <div className="pt-2">
                     <Button onClick={() => setResult(null)} variant="link">
                         {' '}
                         ← Create another page
@@ -215,6 +316,7 @@ function UploadForm() {
                     {/* center align */}
                     <div className="flex flex-col items-center  mt-8">
                         <svg
+                            className="text-green-500"
                             width="128"
                             height="128"
                             viewBox="0 0 15 15"
@@ -232,18 +334,18 @@ function UploadForm() {
                             Page created successfully
                         </div>
                         <div className="flex flex-col items-center">
-                            <div className="text-gray-500 text-sm my-2">
+                            <div className="text-gray-500 text-sm my-4">
                                 Share the below url to your zkPage.
                             </div>
                         </div>
-                        <Link
+                        {/* <Link
                             href={result.url}
                             target="_blank"
                             className="text-blue-500 text-sm hover:underline"
                             rel="noopener noreferrer"
                         >
                             {result.url}
-                        </Link>
+                        </Link> */}
                         <div className="mt-2">
                             {result?.contractUrl && (
                                 <Button
@@ -263,7 +365,7 @@ function UploadForm() {
                                         window.open(result.url)
                                     }}
                                 >
-                                    View page
+                                    Share zkPage
                                 </Button>
                             )}
                         </div>

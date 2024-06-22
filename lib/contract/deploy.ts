@@ -6,18 +6,7 @@ const PROVIDER_SEPOLIA = new RpcProvider({
     nodeUrl: 'https://free-rpc.nethermind.io/sepolia-juno/v0_7',
 })
 
-export async function deployContract(
-    account: any,
-    ownerAddress: string,
-    title: string,
-    description: string,
-    itemString: string
-) {
-    // Declare & deploy contract
-    // https://github.com/ArnaudBD/starknet-counter-workshop/blob/8b3759fa338a36416a793074d7c5f875e8f7bb9c/target/dev/counter_Counter.contract_class.json
-    const sierraCode = PAGE_CONTRACT_SIERRA
-    const casmCode = PAGE_CONTRACT_CASM
-    const myCallData = new CallData(sierraCode.abi)
+function createByteArray(itemString: string) {
     const itemBytes = itemString // new TextEncoder().encode(itemString)
     // split itemstring into 31 byte chunks
     const pieces = []
@@ -30,16 +19,32 @@ export async function deployContract(
         pending_word: itemBytes.length % 31,
         data: pieces,
     }
+
+    return byteArray
+}
+
+export async function deployContract(
+    account: any,
+    ownerAddress: string,
+    title: string,
+    description: string,
+    itemString: string
+) {
+    // Declare & deploy contract
+    // https://github.com/ArnaudBD/starknet-counter-workshop/blob/8b3759fa338a36416a793074d7c5f875e8f7bb9c/target/dev/counter_Counter.contract_class.json
+    const sierraCode = PAGE_CONTRACT_SIERRA
+    const casmCode = PAGE_CONTRACT_CASM
+    const myCallData = new CallData(sierraCode.abi)
     const args = {
         page_name: title,
-        description: description,
+        description: createByteArray(description),
         owner: ownerAddress,
-        items: byteArray,
+        items: createByteArray(itemString),
     }
     // const args = [title, description, ownerAddress, itemString]
     const constructor = myCallData.compile('constructor', args)
 
-    console.log('Deploying contract...', title, sierraCode, casmCode, args)
+    console.log('Deploying contract...', args)
     const deployResponse = await account.declareAndDeploy({
         contract: sierraCode,
         casm: casmCode,

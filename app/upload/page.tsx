@@ -11,7 +11,7 @@ const Upload = () => {
             {/* make min width 400 */}
             <BasicCard
                 className="w-[600px] p-4"
-                title="Create new store front (zkPage)"
+                title="Create new store front"
                 description="Create a new store front. This page will become publicly available for other users to discover and make purchases."
             >
                 <UploadForm />

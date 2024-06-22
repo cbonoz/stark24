@@ -53,7 +53,7 @@ export const getExplorerUrl = (address?: string, isTx?: boolean) => {
 export const transformMetadata = (contractData: any): PageData => {
     // This is where we can transform the contract data to a more usable format,
     const name = feltToStr(contractData[0])
-    const description = feltToStr(contractData[1])
+    const description = feltArrToStr(contractData[1].data)
     const owner = feltToStr(contractData[2])
     const itemString = feltArrToStr(contractData[3].data)
     const items = JSON.parse(itemString)
