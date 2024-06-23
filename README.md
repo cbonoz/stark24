@@ -135,16 +135,10 @@ Example calls on a deployed zkpage contract
 <img src="img/cairo.png" alt="Cairo Integration" width="600"/>
 Screenshot of the zkpage smart contract logic (search `zkpage.cairo` in the github)
 
-## Receipts
+## Viewing store receipts on chain
 <img src="img/receipts.png" alt="Receipts" width="600"/>
 Viewing receipts for completed transactions on a given address against a zkpage contract in app.
 
-
-
-### Useful links
-
-* https://ethglobal.com/events/starkhack/prizes
-* https://github.com/shadcn-ui/ui/discussions/790
 
 ### License
 
