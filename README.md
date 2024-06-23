@@ -8,15 +8,15 @@
 ZkPages
 ---
 
-Zero knowledge digital content single page store fronts.
+Zero knowledge digital content single page store fronts on Starknet.
 
-Enable anyone to create a secure digital content store front page on Stark.
+Enable anyone to create a secure digital content store front page.
 
 Going after the Consumer and Privacy categories for StarkHack 2024.
 
 Live Demo url: https://zkpages.vercel.app (Starknet Sepolia testnet)
 
-Demo video (youtube ~3 minutes):
+Demo video (youtube ~3 minutes): https://youtu.be/HO9kQjtSUjE
 
 ### Motivation
 
