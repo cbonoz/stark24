@@ -22,7 +22,7 @@ const NavHeader = () => {
                 </a>
                 |
                 <a href="/pid" className="text-gray-500 hover:underline mx-4">
-                    Discover store front
+                    Lookup store front
                 </a>
                 |
                 <a href="/about" className="text-gray-500 hover:underline mx-4">
