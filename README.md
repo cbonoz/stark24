@@ -8,9 +8,7 @@
 ZkPages
 ---
 
-Zero-knowledge digital content single-page storefronts on Starknet.
-
-Enable anyone to create a secure digital content storefront page.
+Zero-knowledge digital content single-page storefronts on Starknet. ZkPages enables any user to create their own digital content store managed by smart contracts.
 
 Going after the Consumer and Privacy categories for StarkHack 2024.
 
