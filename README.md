@@ -1,6 +1,9 @@
 <p align='center'>
-  <img src="./public/logo.png" width=600 />
+  <img src="./public/logo.png" width="400px" />
 </p>
+
+<br/>
+<br/>
 
 ZkPages
 ---
