@@ -31,9 +31,10 @@ We wanted to see if we could use Starknet to solve this prolem. With ZkPages, an
 - [x] Trace-free payments
 - [x] Off-platform content support via custom post-purchase links
 
-### Example deployed store:
+### Example deployed store
 
-https://zkpages.vercel.app/pid/0x6171e50d9a19e57699ba2a21e79743f3244bff65bbbe3d06906a304e6b16971
+App-hosted page: https://zkpages.vercel.app/pid/0x6171e50d9a19e57699ba2a21e79743f3244bff65bbbe3d06906a304e6b16971
+Contract on explorer: https://sepolia.starkscan.co/contract/0x06171e50d9a19e57699ba2a21e79743f3244bff65bbbe3d06906a304e6b16971
 
 #### How it works
 
