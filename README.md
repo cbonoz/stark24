@@ -8,9 +8,9 @@
 ZkPages
 ---
 
-Zero knowledge digital content single page store fronts on Starknet.
+Zero-knowledge digital content single-page storefronts on Starknet.
 
-Enable anyone to create a secure digital content store front page.
+Enable anyone to create a secure digital content storefront page.
 
 Going after the Consumer and Privacy categories for StarkHack 2024.
 
@@ -22,7 +22,7 @@ Demo video (youtube ~3 minutes): https://youtu.be/HO9kQjtSUjE
 
 Many platforms for building digital content stores exist, but many of them have drawbacks (ex: Gumroad). In particular, those that are based on web2 technologies often require large engineering teams and centralized services for mediation. There's often limitated 
 
-We wanted to see if we could use Starknet to solve this prolem. With ZkPages, any consumer can create a self-governing digital content checkout page that enables digital content sales without having to agree to high transaction fees on every sale. Additionally, Starknet has intrinsic benefits as a secure ledger for managing receipts and smart contract execution for processing the transactions and redirects for purchases.
+We wanted to see if we could use Starknet to solve this prolem. With ZkPages, any consumer can create a self-governing digital content checkout page that enables digital content sales without having to agree to high transaction fees on every sale. Additionally, Starknet has intrinsic benefits as a secure ledger for managing receipts and smart contract execution for processing transactions and redirects for purchases.
 
 
 ### Features
@@ -39,13 +39,12 @@ https://zkpages.vercel.app/pid/0x6171e50d9a19e57699ba2a21e79743f3244bff65bbbe3d0
 
 #### How it works
 
-zkPages allows users to create single-page digital content storefronts powered by Starknet smart contracts. The platform emphasizes privacy and security through zero-knowledge checkouts and trace-free payments. Users can easily manage their store, upload content, and track their audit history, ensuring transparency and accountability.
+ZkPages allows users to create single-page digital content storefronts powered by Starknet smart contracts. The platform emphasizes privacy and security through zero-knowledge checkouts and trace-free payments. Users can easily manage their store, upload content, and track their audit history, ensuring transparency and accountability.
 
 1. Create a Stark account: Start by creating an account on the Starknet network to get access to the zkPages platform.
 2. Create a zkPages store: Use the zkPages interface to set up your digital content store. Each store is represented as a single-page storefront.
-3. Add digital content: Upload your digital content to the store. The content is delivered securely via IPFS.
+3. Add digital content: Upload your digital content as items to the store. Content for the purchases can be delivered through custom web2/authenticated links or addressed content through IPFS.
 4. Share your store front URL online: Promote your store by sharing the unique URL with your audience.
-Description
 
 A contract event gets emitted for each successful purchase that can be tracked and/or audited from other platforms.
 
@@ -55,15 +54,15 @@ zkPages is built on top of the Starknet blockchain, utilizing its scalability an
 
 When a user accesses a deployed zkPage, he/she has the ability to initiate a private checkout. Upon completion, a contract event gets saved to the zkPage smart contract and the user is redirected to the purchase success url where he/she can access the content. Any guards or security around access (ex: sharing the link with others) should be baked into the url itself, ZkPages does not control or apply any access guards to the url currently otherwise.
 
-<b>Note this app is currently a prototype deployed on the Starknet Sepolia testnet, it requires additional work to be production ready.</b>
+<b>Note this app is currently a prototype deployed on the Starknet Sepolia testnet, it would require additional work to be production-ready.</b>
 
 ### Technologies used
 
-**Starknet**: Core blockchain infrastructure, providing a scalable and secure environment for managing smart contracts and transactions. Starknet is a key component of zkPages, offering a robust foundation for the platform's blockchain operations. Its scalability ensures that zkPages can handle a high volume of transactions without compromising speed or efficiency. The security features of Starknet protect both the store owners and customers, maintaining the integrity of transactions and smart contracts. ZK-rollups enables privacy-focused transactions, ensuring that sensitive information remains confidential while verifying the validity of transactions. L2 is also uniquely advantageous to the app to enable checkouts that have permanent receipts as blockchain transactions at low cost.
+**Starknet**: Starknet provides the core blockchain infrastructure, providing a scalable and secure environment for managing smart contracts and transactions. Starknet is a key component of zkPages, where every storefront (or zkpage) gets represented as its own smart contract. The network's scalability ensures that zkPages can handle a high volume of transactions without compromising speed. ZK-rollups enable privacy-focused transactions, ensuring that sensitive information remains confidential while verifying the validity of transactions. L2 is also uniquely advantageous to the app to enable checkouts that have permanent receipts as blockchain transactions at low cost.
 
 **Dynamic.xyz**: Dynamic.xyz provides the authentication framework for zkPages, ensuring that only authorized users can access and manage their storefronts. Buyers must also connect their wallets to complete purchases. This integration streamlines the user onboarding process, offering a secure and user-friendly way to log in and interact with the platform. Dynamic.xyz supports various authentication methods, enhancing the security and flexibility of the zkPages platform. Dynamic could be used in the future to easily extend the platform to work on other networks without requiring significant changes to the code.
 
-**Voyager**: Integrated for in-app contract interactions and viewing transaction history, providing users with transparency and auditability of their store's activities. By providing detailed insights into contract interactions and transaction logs, Voyager promotes transparency and accountability within the zkPages ecosystem. Voyager APIs in particular enable in-app custom views of blockchain data as transaction receipts without having the leave the app to get information about the performance of the store or looking up transactions from particular users on the network.
+**Voyager**: Integrated for in-app contract interactions and viewing transaction history, providing users with transparency and auditability of their store's activities. By providing detailed insights into contract interactions and transaction logs, Voyager promotes transparency and accountability within the zkPages ecosystem. Voyager APIs, in particular, enable in-app custom views of blockchain data as transaction receipts without having to leave the app to get information about recent activity with a zkpage contract or look up transactions from particular users on the network.
 
 
 ### Updating the Cairo smart contract
