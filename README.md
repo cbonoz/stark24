@@ -14,7 +14,7 @@ Going after the Consumer and Privacy categories for StarkHack 2024.
 
 Live Demo url: https://zkpages.vercel.app (Starknet Sepolia testnet)
 
-Demo video (youtube ~3 minutes): https://youtu.be/HO9kQjtSUjE
+Demo video (youtube ~4 minutes): https://youtu.be/HO9kQjtSUjE
 
 ### Motivation
 
