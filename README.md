@@ -10,9 +10,9 @@ ZkPages
 
 Zero knowledge digital content single page store fronts.
 
-Enable anyone to create a secure digital content store front page on Stark. Privacy-focused checkouts.
+Enable anyone to create a secure digital content store front page on Stark.
 
-Going after the Consumer and Privacy categories of Starknet.
+Going after the Consumer and Privacy categories for StarkHack 2024.
 
 Live Demo url: https://zkpages.vercel.app (Starknet Sepolia testnet)
 
@@ -53,39 +53,44 @@ When a user accesses a deployed zkPage, he/she has the ability to initiate a pri
 
 ### Technologies used
 
-**Starknet**: Core blockchain infrastructure, providing a scalable and secure environment for managing smart contracts and transactions. Starknet is a key component of zkPages, offering a robust foundation for the platform's blockchain operations. Its scalability ensures that zkPages can handle a high volume of transactions without compromising speed or efficiency. The security features of Starknet protect both the store owners and customers, maintaining the integrity of transactions and smart contracts. By leveraging Starknet's zero-knowledge proof technology, zkPages enables privacy-focused checkouts, ensuring that sensitive information remains confidential while verifying the validity of transactions. L2 is also uniquely advantageous to the app to enable checkouts that have permanent receipts as blockchain transactions at low cost.
+**Starknet**: Core blockchain infrastructure, providing a scalable and secure environment for managing smart contracts and transactions. Starknet is a key component of zkPages, offering a robust foundation for the platform's blockchain operations. Its scalability ensures that zkPages can handle a high volume of transactions without compromising speed or efficiency. The security features of Starknet protect both the store owners and customers, maintaining the integrity of transactions and smart contracts. ZK-rollups enables privacy-focused transactions, ensuring that sensitive information remains confidential while verifying the validity of transactions. L2 is also uniquely advantageous to the app to enable checkouts that have permanent receipts as blockchain transactions at low cost.
 
-**Dynamic.xyz**: Dynamic.xyz provides the authentication framework for zkPages, ensuring that only authorized users can access and manage their storefronts. This integration streamlines the user onboarding process, offering a secure and user-friendly way to log in and interact with the platform. Dynamic.xyz supports various authentication methods, enhancing the security and flexibility of the zkPages platform. Dynamic could be used in the future to easily extend the platform to work on other networks for doing simple checkout pages without significant changes to the code.
+**Dynamic.xyz**: Dynamic.xyz provides the authentication framework for zkPages, ensuring that only authorized users can access and manage their storefronts. Buyers must also connect their wallets to complete purchases. This integration streamlines the user onboarding process, offering a secure and user-friendly way to log in and interact with the platform. Dynamic.xyz supports various authentication methods, enhancing the security and flexibility of the zkPages platform. Dynamic could be used in the future to easily extend the platform to work on other networks without requiring significant changes to the code.
 
 **Voyager**: Integrated for in-app contract interactions and viewing transaction history, providing users with transparency and auditability of their store's activities. By providing detailed insights into contract interactions and transaction logs, Voyager promotes transparency and accountability within the zkPages ecosystem. Voyager APIs in particular enable in-app custom views of blockchain data as transaction receipts without having the leave the app to get information about the performance of the store or looking up transactions from particular users on the network.
 
 
 ### Updating the Cairo smart contract
 
-Make any updates to `zkpages.cairo`
-
 From the `/contracts` folder:
 
-`scarb build`
+Make any updates to `zkpages.cairo` in the `/src` folder.
+
+Run: `scarb build`
 
 If successful, you should have the casm and sierra output files. Assign the contents into the `casm.ts` and `sierra.ts` object files respectively. The updated contract should now be active in the application.
 
+`./build.sh` will also automatically copy the contents over to the app directory for you.
+
 ### Potential Future work
-Mainnet Deployment: Transition zkPages to the Starknet mainnet, ensuring stability, security, and scalability for real-world usage.
 
-Enhance Access Controls: Implement advanced mechanisms like time-limited access links and single-use tokens to prevent unauthorized content sharing.
+1. Mainnet Deployment: Transition zkPages to the Starknet mainnet, ensuring stability, security, and scalability for real-world usage.
 
-Optimization Controls: Introduce performance optimization features such as caching, load balancing, and efficient data retrieval to handle high traffic.
+2. Enhance Access Controls: Implement advanced mechanisms like time-limited access links and single-use tokens to prevent unauthorized content sharing.
 
-Expanded Payment Options: Integrate additional payment gateways and support various cryptocurrencies and fiat currencies for broader accessibility.
+3. Optimization Controls: Introduce performance optimization features such as caching, load balancing, and efficient data retrieval to handle high traffic.
 
-Advanced Analytics and Reporting: Develop tools for tracking visitor behavior, sales performance, and other key metrics to help store owners optimize their storefronts
+4. Expanded Payment Options: Integrate additional payment gateways and support various cryptocurrencies and fiat currencies for broader accessibility.
+
+5. Advanced Analytics and Reporting: Develop tools for tracking visitor behavior, sales performance, and other key metrics to help store owners optimize their storefronts
 
 
 ### Screenshots
 
 
 ### Useful links
+
+* https://ethglobal.com/events/starkhack/prizes
 * https://github.com/shadcn-ui/ui/discussions/790
 
 ### License
