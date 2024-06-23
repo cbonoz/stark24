@@ -179,6 +179,14 @@ export default function ZkPage({ params }: { params: Params }) {
     const showAdmin = !!VOYAGE_KEY
     const isPurchasePending = isPending || purchaseLoading
 
+    const getTitle = () => {
+        if (generalError) {
+            return 'Error finding page'
+        }
+
+        return data?.name || 'ZkPage'
+    }
+
     return (
         // center align
         <div className="flex flex-col items-center justify-center mt-8">

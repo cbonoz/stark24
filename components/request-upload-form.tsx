@@ -340,9 +340,10 @@ function UploadForm() {
                           
                         </div>
                         <div className="text-blue-500 text-sm">
-                                If the contract shows as not deployed yet, it
+                                If the contract shows as not deployed, it
                                 may take a few minutes for the contract to
-                                complete deployment.
+                                complete deployment. Return to these pages once the deploy has confirmed.
+                                 {/* before it is publicly accessible. */}
                             </div>
                         {/* <Link
                             href={result.url}

@@ -33,6 +33,10 @@ We wanted to see if we could use Starknet to solve this prolem. With ZkPages, an
 - [x] Trace-free payments
 - [x] Off-platform content support via custom post-purchase links
 
+### Example deployed store:
+
+https://zkpages.vercel.app/pid/0x6171e50d9a19e57699ba2a21e79743f3244bff65bbbe3d06906a304e6b16971
+
 #### How it works
 
 zkPages allows users to create single-page digital content storefronts powered by Starknet smart contracts. The platform emphasizes privacy and security through zero-knowledge checkouts and trace-free payments. Users can easily manage their store, upload content, and track their audit history, ensuring transparency and accountability.
@@ -42,6 +46,8 @@ zkPages allows users to create single-page digital content storefronts powered b
 3. Add digital content: Upload your digital content to the store. The content is delivered securely via IPFS.
 4. Share your store front URL online: Promote your store by sharing the unique URL with your audience.
 Description
+
+A contract event gets emitted for each successful purchase that can be tracked and/or audited from other platforms.
 
 ### How it's made
 
@@ -86,6 +92,53 @@ If successful, you should have the casm and sierra output files. Assign the cont
 
 
 ### Screenshots
+
+
+## Home Page
+<img src="img/home.png" alt="Home Page" width="600"/>
+The landing page of our application, providing an overview and easy navigation.
+
+## About Us
+<img src="img/about.png" alt="About Us" width="600"/>
+Additional information about the project and the testnet prototype.
+
+## Deploy
+<img src="img/deploy.png" alt="Deploy" width="600"/>
+Deploying a new contract storefront.
+
+## Purchase Process
+### Purchase
+<img src="img/purchase.png" alt="Purchase" width="600"/>
+Steps to make a purchase through a store front page (zkpage).
+
+### Purchased
+<img src="img/purchased.png" alt="Purchased" width="600"/>
+Confirmation and details of a successfully completed purchase.
+
+## Transactions
+<img src="img/transaction.png" alt="Transaction" width="600"/>
+Overview of recent transactions and their statuses.
+
+## Storefront Page
+<img src="img/zkpage.png" alt="Storefront Page" width="600"/>
+Screenshot of our storefront page, showcasing products and services.
+
+## Storefront Contract
+<img src="img/contract.png" alt="Storefront Contract" width="600"/>
+Example screenshot of a zkpage contract deployed for each store, ensuring secure and efficient operations.
+
+## Contract calls
+<img src="img/calls.png" alt="API Calls" width="600"/>
+Example calls on a deployed zkpage contract
+
+## Cairo smart contract
+<img src="img/cairo.png" alt="Cairo Integration" width="600"/>
+Screenshot of the zkpage smart contract logic (search `zkpage.cairo` in the github)
+
+## Receipts
+<img src="img/receipts.png" alt="Receipts" width="600"/>
+Viewing receipts for completed transactions on a given address against a zkpage contract in app.
+
 
 
 ### Useful links
