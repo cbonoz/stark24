@@ -18,7 +18,7 @@ Demo video (youtube ~4 minutes): https://youtu.be/HO9kQjtSUjE
 
 ### Motivation
 
-Many platforms for building digital content stores exist, but many of them have drawbacks (ex: Gumroad). In particular, those that are based on web2 technologies often require large engineering teams and centralized services for mediation. There's often limitated 
+Many platforms for building digital content stores exist, but many of them have drawbacks (ex: Gumroad). In particular, those that are based on web2 technologies often require large engineering teams and centralized services for mediation. There's often limitated
 
 We wanted to see if we could use Starknet to solve this prolem. With ZkPages, any consumer can create a self-governing digital content checkout page that enables digital content sales without having to agree to high transaction fees on every sale. Additionally, Starknet has intrinsic benefits as a secure ledger for managing receipts and smart contract execution for processing transactions and redirects for purchases.
 
@@ -31,10 +31,15 @@ We wanted to see if we could use Starknet to solve this prolem. With ZkPages, an
 - [x] Trace-free payments
 - [x] Off-platform content support via custom post-purchase links
 
-### Example deployed store
+### Example deployed stores
 
+1.
 App-hosted page: https://zkpages.vercel.app/pid/0x6171e50d9a19e57699ba2a21e79743f3244bff65bbbe3d06906a304e6b16971
 Contract on explorer: https://sepolia.starkscan.co/contract/0x06171e50d9a19e57699ba2a21e79743f3244bff65bbbe3d06906a304e6b16971
+
+2.
+App-hosted page: https://zkpages.vercel.app/pid/0x2bb706159ff3a8395dd4d0ef7de3f7e6bbca22e687fce1536cc19a6be560370
+Contract on explorer: https://sepolia.starkscan.co/contract/0x2bb706159ff3a8395dd4d0ef7de3f7e6bbca22e687fce1536cc19a6be560370
 
 #### How it works
 
