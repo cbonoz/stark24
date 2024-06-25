@@ -88,7 +88,7 @@ export const transformMetadata = (contractData: any): PageData => {
         owner: owner,
         items,
     }
-    console.log('transformMetadata', data)
+    // console.log('transformMetadata', data)
     return data
 }
 

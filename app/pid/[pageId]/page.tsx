@@ -133,7 +133,7 @@ export default function ZkPage({ params }: { params: Params }) {
         setPurchaseLoading(true)
 
         try {
-            if (!isConnected && !ready || !account) {
+            if ((!isConnected && !ready) || !account) {
                 const key = primaryWallet?.key
                 const connectorIndex = key === 'braavos' ? 0 : 1
 
@@ -269,7 +269,7 @@ export default function ZkPage({ params }: { params: Params }) {
                 )}
                 {/* <RenderObject title="Data" obj={data} /> */}
 
-                {viewReceipts && isOwner && <ViewReceipts pageId={pageId} />}
+                {viewReceipts && <ViewReceipts pageId={pageId} />}
 
                 {data && !result && !viewReceipts && (
                     <div className="mt-8 space-y-8">
