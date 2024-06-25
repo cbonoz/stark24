@@ -148,7 +148,9 @@ const ViewReceipts = ({ pageId }: Props) => {
                 </TabsContent>
             </Tabs>
 
-            {loading && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
+            {loading && (
+                <ReloadIcon className="mt-2 mr-2 h-4 w-4 animate-spin" />
+            )}
             {error && <div className="text-red-500">{error}</div>}
             {/* Pulled from voyager link */}
         </div>
