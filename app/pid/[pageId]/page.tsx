@@ -235,18 +235,7 @@ export default function ZkPage({ params }: { params: Params }) {
                 {/* {JSON.stringify({ writeData, writeError, generalError })} */}
                 {result && (
                     <div className="min-w-[800px]">
-                        <div className="text-green-500 text-xl mb-8">
-                            Thanks for your purchase!
-                        </div>
-
-                        {data?.items[lastSelectedItemId].link && (
-                            <div className="my-4">
-                                You bought:{' '}
-                                {data?.items[lastSelectedItemId].name}
-                            </div>
-                        )}
-
-                        <div className="my-4">
+                        <div>
                             <Button
                                 variant={'link'}
                                 onClick={() => {
@@ -256,10 +245,22 @@ export default function ZkPage({ params }: { params: Params }) {
                                 {'<- Back to store'}
                             </Button>
                         </div>
+                        <div className="text-green-500 text-xl my-4">
+                            Thanks for your purchase!
+                        </div>
+                        {data?.items[lastSelectedItemId].link && (
+                            <div className="my-4">
+                                You bought:{' '}
+                                <span className="font-bold">
+                                    {data?.items[lastSelectedItemId].name}
+                                </span>
+                            </div>
+                        )}
+
                         {result?.transaction_hash && (
                             <span className="mt-4">
                                 <Button
-                                    variant={'link'}
+                                    variant={'outline'}
                                     onClick={() =>
                                         window.open(
                                             getExplorerUrl(
@@ -276,6 +277,7 @@ export default function ZkPage({ params }: { params: Params }) {
                                 {/* Go to content link based on index */}
                                 <Button
                                     variant={'default'}
+                                    // className="bg-purple-600 text-white font-semibold rounded-lg shadow-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 hover:shadow-lg transition-all duration-300 ease-in-out hover:cursor-pointer"
                                     onClick={() => {
                                         window.open(result.contentUrl)
                                     }}
