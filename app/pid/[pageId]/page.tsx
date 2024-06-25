@@ -83,10 +83,7 @@ export default function ZkPage({ params }: { params: Params }) {
         const transactions = []
         const item = data?.items[lastSelectedItemId]
         if (item?.price) {
-            const amount = Number(item.price) * 1e18
-            transactions.push(
-                contract.populateTransaction['transfer']!(data.owner, amount)
-            )
+            console.log('calling purchase', item)
         }
 
         transactions.push({
