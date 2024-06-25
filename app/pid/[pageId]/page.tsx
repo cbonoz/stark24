@@ -43,6 +43,7 @@ export default function ZkPage({ params }: { params: Params }) {
     const [ready, setReady] = useState(false)
     const { primaryWallet } = useDynamicContext()
     const [result, setResult] = useState<any>()
+    const [timeoutMet, setTimeoutMet] = useState(false)
     const { pageId } = params
     const [error, setError] = useState<Error | null>(null)
     const { account, isConnected, address: starkAddress } = useAccount()
@@ -51,6 +52,15 @@ export default function ZkPage({ params }: { params: Params }) {
     const [viewReceipts, setViewReceipts] = useState(false)
 
     const address = starkAddress || primaryWallet?.address
+
+    const clearState = () => {
+        setLoading(false)
+        setPurchaseLoading(false)
+        // setLastSelectedItemId(-1)
+        setReady(false)
+        setResult(null)
+        setTimeoutMet(false)
+    }
 
     const { contract } = useContract({
         abi: PAGE_CONTRACT_SIERRA.abi,
@@ -119,6 +129,14 @@ export default function ZkPage({ params }: { params: Params }) {
         }
     }, [writeData])
 
+    // on timeout
+    useEffect(() => {
+        if (timeoutMet) {
+            writeAsync()
+            setTimeoutMet(false)
+        }
+    }, [timeoutMet])
+
     const isOwner = data?.owner === address
 
     async function purchaseRequest() {
@@ -137,7 +155,7 @@ export default function ZkPage({ params }: { params: Params }) {
                 connect({ connector: connectors[connectorIndex] })
                 setReady(true)
                 setTimeout(() => {
-                    writeAsync()
+                    setTimeoutMet(true)
                 }, 5000)
             } else {
                 const res = await writeAsync()
@@ -149,6 +167,14 @@ export default function ZkPage({ params }: { params: Params }) {
         } finally {
         }
     }
+
+    // console.log('writeError', writeError)
+
+    useEffect(() => {
+        if (writeError) {
+            clearState()
+        }
+    }, [writeError])
 
     if (isLoading) {
         return (
@@ -190,7 +216,7 @@ export default function ZkPage({ params }: { params: Params }) {
             <BasicCard
                 title={
                     <span>
-                        <span>{data?.name || 'ZkPage'}</span>
+                        <span>{getTitle()}</span>
                         {showAdmin && (
                             <span
                                 onClick={toggleReceipts}
@@ -213,12 +239,18 @@ export default function ZkPage({ params }: { params: Params }) {
                             Thanks for your purchase!
                         </div>
 
+                        {data?.items[lastSelectedItemId].link && (
+                            <div className="my-4">
+                                You bought:{' '}
+                                {data?.items[lastSelectedItemId].name}
+                            </div>
+                        )}
+
                         <div className="my-4">
                             <Button
                                 variant={'link'}
                                 onClick={() => {
-                                    setResult(null)
-                                    setLastSelectedItemId(-1)
+                                    clearState()
                                 }}
                             >
                                 {'<- Back to store'}
@@ -291,6 +323,19 @@ export default function ZkPage({ params }: { params: Params }) {
                                         disabled={isPurchasePending}
                                         className="mt-4 flex items-center px-4 py-2 bg-purple-600 text-white font-semibold rounded-lg shadow-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 hover:shadow-lg transition-all duration-300 ease-in-out hover:cursor-pointer"
                                         onClick={() => {
+                                            if (isPurchasePending) {
+                                                return
+                                            } else if (
+                                                lastSelectedItemId == index &&
+                                                writeError
+                                            ) {
+                                                setLastSelectedItemId(-1)
+                                                setTimeout(() => {
+                                                    setLastSelectedItemId(index)
+                                                }, 200)
+                                                return
+                                            }
+
                                             setLastSelectedItemId(index)
                                         }}
                                     >
